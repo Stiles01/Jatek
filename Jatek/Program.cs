@@ -10,6 +10,8 @@ namespace Jatek
     {
         static void Main(string[] args)
         {
+            //Készítette: Nagy Viktória
+            //Játék neve: Szabaduló-szoba
         }
     }
 }
