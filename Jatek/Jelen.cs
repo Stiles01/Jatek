@@ -8,7 +8,7 @@ namespace Jatek
 {
     class Jelen
     {
-        
+        public 
 
     }
 }
