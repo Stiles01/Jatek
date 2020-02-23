@@ -56,6 +56,15 @@ namespace Jatek
             {
                 string parancs = Console.ReadLine().Trim();
                 string[] tobbparancs = parancs.Split(' ');
+                switch (tobbparancs.Length)
+                {
+                    case 1: break;
+                    case 2: break;
+                    case 3: break;
+                    case 4: break;
+                    default:
+                        break;
+                }
             }
 
             Console.ReadKey();
