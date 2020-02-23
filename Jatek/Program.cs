@@ -48,20 +48,25 @@ namespace Jatek
             //Játék neve: Szabaduló-szoba
 
             bool Keszvane = false;
+            Parancs p;
 
             Console.WriteLine("Új játékot kezdesz vagy betöltöd a már meglevő mentésed?\núj/mentés");          
             Betolt(Console.ReadLine());
             Console.WriteLine("Ha bármikor elakadnál nyomd meg a \"?\" billentyűt!");
             while (!Keszvane)
             {
-                string parancs = Console.ReadLine().Trim();
+                string parancs = Console.ReadLine().Trim();               
                 string[] tobbparancs = parancs.Split(' ');
                 switch (tobbparancs.Length)
                 {
-                    case 1: break;
-                    case 2: break;
-                    case 3: break;
-                    case 4: break;
+                    case 1: p = new Parancs(tobbparancs[0]); // kulonbozo metodusok a case-en belul?? 
+                        break;
+                    case 2: p = new Parancs(tobbparancs[0], tobbparancs[1]);
+                        break;
+                    case 3: p = new Parancs(tobbparancs[0], tobbparancs[1], tobbparancs[2]);
+                        break;
+                    case 4: p = new Parancs(String.Join(" ",tobbparancs[0], tobbparancs[1]), tobbparancs[2], tobbparancs[3]);
+                        break;
                     default:
                         break;
                 }

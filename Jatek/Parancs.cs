@@ -30,5 +30,7 @@ namespace Jatek
             Miaz = miaz;
             Mithasznal = mithasznal;
         }
+
+
     }
 }
