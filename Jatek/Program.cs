@@ -41,7 +41,12 @@ namespace Jatek
             return a = "";
         }
 
-        
+        static string Nemhelyes(string parancs)
+        {
+            string a;
+            return a = "";
+        }
+
         static void Main(string[] args)
         {
             //Készítette: Nagy Viktória
@@ -49,6 +54,7 @@ namespace Jatek
 
             bool Keszvane = false;
             Parancs p;
+
 
             Console.WriteLine("Új játékot kezdesz vagy betöltöd a már meglevő mentésed?\núj/mentés");          
             Betolt(Console.ReadLine());
@@ -59,15 +65,34 @@ namespace Jatek
                 string[] tobbparancs = parancs.Split(' ');
                 switch (tobbparancs.Length)
                 {
-                    case 1: p = new Parancs(tobbparancs[0]); // kulonbozo metodusok a case-en belul?? 
+                    case 1: p = new Parancs(tobbparancs[0]);
+                        switch (p.Mitcsinal)
+                        {
+                            case "nézd": break;
+                            case "kelet": break;
+                            case "nyugat": break;
+                            case "észak": break;
+                            case "?": break;
+                            case "leltár": break;
+                            case "mentés": break;
+                            default:
+                                Console.WriteLine($"({Nemhelyes(parancs)})");
+                                break;
+                        }
+                         // nezd, kelet, nyugat, eszak, ?, leltar, mentes
                         break;
                     case 2: p = new Parancs(tobbparancs[0], tobbparancs[1]);
+                            // nezd, vedd fel, tedd le, huzd, nyisd
                         break;
                     case 3: p = new Parancs(tobbparancs[0], tobbparancs[1], tobbparancs[2]);
+                            // nyisd, tord
                         break;
                     case 4: p = new Parancs(String.Join(" ",tobbparancs[0], tobbparancs[1]), tobbparancs[2], tobbparancs[3]);
+                            // nyisd, tord
                         break;
                     default:
+                        Console.WriteLine($"Helytelen parancsot adtál meg:\nmit csinálsz / mivel / mit használsz hozzá");
+                        // continue;
                         break;
                 }
             }

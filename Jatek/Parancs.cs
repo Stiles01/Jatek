@@ -31,6 +31,8 @@ namespace Jatek
             Mithasznal = mithasznal;
         }
 
+        
+
 
     }
 }
