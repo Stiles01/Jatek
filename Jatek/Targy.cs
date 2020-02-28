@@ -11,18 +11,50 @@ namespace Jatek
         public string Szoba { get; set; }
         public bool LathatoE { get; set; }
         public Dictionary<string, bool> MitLehet = new Dictionary<string, bool>();
+        public bool Elvegzette { get; set; }
 
-        public Targy(string szoba, string mitlehetsor, bool lathatoe)
+        public Targy()
+        {
+            Szoba = "";           
+            MitLehet.Add("", false);
+        }
+
+        public void Ertek(string szoba, string mitlehetsor, bool lathatoe, bool elvegzette)
         {
             Szoba = szoba;
             string[] seged = mitlehetsor.Split(';');
+            MitLehet.Clear();
             foreach (var item in seged)
             {
                 MitLehet.Add(item, false);
             }
             LathatoE = lathatoe;
+            Elvegzette = elvegzette;
+            
+        }
+
+        public void ErtekBetoltes(string sor)
+        {
+            string[] seged = sor.Split(';');
+            string[] seged2 = seged[2].Replace("[", "").Replace("]", "").Replace(" ", "").Split('-');
+            Szoba = seged[0];            
+            MitLehet.Clear();
+            foreach (var item in seged2)
+            {
+                string[] seged3 = item.Split(',');
+                MitLehet.Add(seged3[0], bool.Parse(seged3[1]));
+            }
+            LathatoE = bool.Parse(seged[1]);
+            Elvegzette = bool.Parse(seged[3]);
+        }
+
+        public string Menteshez()
+        {
+            string a = String.Join("-", MitLehet);
+            return String.Join(";", Szoba, LathatoE, a, Elvegzette);
         }
 
         
+
     }
 }
