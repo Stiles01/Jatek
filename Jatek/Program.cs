@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Jatek
 {
@@ -29,23 +30,26 @@ namespace Jatek
             }
         }
 
-        static string Mentes()
+
+        static string Mentes(List<string> leltar, Targy szekreny, Targy doboz, Targy kulcs, Targy ajto, Targy ablak, Targy furdokad, Targy feszitovas, string allohely)
         {
-            
-            return "";
+            string leltarok = String.Join(";", leltar);
+            return String.Join("\n", leltarok, szekreny.Menteshez(), doboz.Menteshez(), kulcs.Menteshez(), ajto.Menteshez(), ablak.Menteshez(), furdokad.Menteshez(), feszitovas.Menteshez(), allohely);
         }
+        
 
         static string Nemhelyes(string parancs)
-        {
-            
+        {           
             return "";
         }
+        
 
         static string Help()
         {
             
-            return "A helyes utasítássorozat: \nmit csinálunk / mivel (nem kötelező) / mit használunk hozzá (nem kötelező)";
+            return "A helyes utasítássorozat: \nmit csinálunk / mivel (nem kötelező) / mit használunk hozzá (nem kötelező)\nParancsok:\t? / leltár/ mentés\nirányok:\tkelet/ nyugat / észak\ncselekmények:\t / nézd / vedd fel / tedd le / nyisd / húzd / törd";
         }
+
 
         static void Main(string[] args)
         {
@@ -54,6 +58,7 @@ namespace Jatek
 
             bool Keszvane = false;
             Parancs p;
+
             List<string> Leltar = new List<string>();
             List<string> Allohely = new List<string>();
             Targy Szekreny = new Targy();
@@ -63,16 +68,18 @@ namespace Jatek
             Targy Ablak = new Targy();
             Targy Furdokad = new Targy();
             Targy Feszitovas = new Targy();
+           
 
             
             Console.WriteLine("Új játékot kezdesz vagy betöltöd a már meglevő mentésed?\núj/mentés");          
             string a = Betolt(Console.ReadLine());
             
+
             while (a == "null" || a == "false" || a == "true")
             {
                 if (a == "false")
                 {
-                    Szekreny.Ertek("nappali", "nyisd;nézd;húzd", true, false);
+                    Szekreny.Ertek("nappali", "nyisd;nézd;húzd", true, false);                   
                     Doboz.Ertek("nappali", "nyisd;nézd", false, false);
                     Kulcs.Ertek("nappali", "vedd fel;tedd le;nézd", false, true);
                     Ajto.Ertek("nappali", "nyisd;nézd", true, false);
@@ -80,12 +87,31 @@ namespace Jatek
                     Furdokad.Ertek("fürdő", "nézd", false, false);
                     Feszitovas.Ertek("fürdő", "nézd;vedd fel;tedd le", false, true);
                     Allohely.Add("nappali");
+                    Leltar.Clear();
                     break;
                 }
                 else
                 {
                     if (a == "true")
                     {
+                        StreamReader r = new StreamReader("mentes.sav");
+                        string c = r.ReadLine();
+                        if (c != "")
+                        {
+                            string[] seged = c.Split(';');
+                            foreach (var item in seged)
+                            {
+                                Leltar.Add(item);
+                            }
+                        }
+                        Szekreny.ErtekBetoltes(r.ReadLine());
+                        Doboz.ErtekBetoltes(r.ReadLine());
+                        Kulcs.ErtekBetoltes(r.ReadLine());
+                        Ajto.ErtekBetoltes(r.ReadLine());
+                        Ablak.ErtekBetoltes(r.ReadLine());
+                        Furdokad.ErtekBetoltes(r.ReadLine());
+                        Feszitovas.ErtekBetoltes(r.ReadLine());
+                        Allohely.Add(r.ReadLine());
                         break;
                     }
                     else
@@ -98,6 +124,7 @@ namespace Jatek
             }
             Console.WriteLine("Ha bármikor elakadnál nyomd meg a \"?\" billentyűt!");
 
+
             while (!Keszvane)
             {
                 string parancs = Console.ReadLine().Trim();               
@@ -107,32 +134,20 @@ namespace Jatek
                     case 1: p = new Parancs(tobbparancs[0]);
                         switch (p.Mitcsinal)
                         {
-                            case "nézd": break;
-                            case "kelet":
-                                if (Allohely.Last()=="fürdő")
-                                {
-                                    Allohely.Add("nappali");
-                                    if (Ablak.LathatoE == false)
-                                    {
-                                        Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.");
+                            case "nézd":
+                                    if (Allohely.Last()=="nappali")
+                                    {                                    
+                                        if (Ablak.LathatoE == false)
+                                        {
+                                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.");
+                                        }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.");
-                                    }
-                                    
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Innen nem lehet keletre menni! (A nappaliban vagy)");
-                                }
-                                break;
-                            case "nyugat":
-                                if (Allohely.Last() == "nappali")
-                                {
-                                    if (Ajto.Elvegzette == true)
-                                    {
-                                        Allohely.Add("fürdő");
                                         if (Feszitovas.LathatoE == false)
                                         {
                                             Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat és egy ajtót keletre.");
@@ -141,25 +156,95 @@ namespace Jatek
                                         {
                                             Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat, benne egy feszítővasat és egy ajtót nyugatra.");
                                         }
-                                        
+                                    }
+                                break;
+
+                            case "kelet":
+                                    if (Allohely.Last()=="fürdő")
+                                    {
+                                        Allohely.Add("nappali");
+                                        if (Ablak.LathatoE == false)
+                                        {
+                                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.");
+                                        }
+                                    
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Nyugatra egy zárt ajtó található.");
+                                        Console.WriteLine("Innen nem lehet keletre menni! (A nappaliban vagy)");
                                     }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Innen nem lehet nyugatra menni! (A fürdőben vagy)");
-                                }
+                                break;
+
+                            case "nyugat":
+                                    if (Allohely.Last() == "nappali")
+                                    {
+                                        if (Ajto.Elvegzette == true)
+                                        {   
+                                            Allohely.Add("fürdő");
+                                            if (Feszitovas.LathatoE == false)
+                                            {
+                                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat és egy ajtót keletre.");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat, benne egy feszítővasat és egy ajtót nyugatra.");
+                                            }
+                                        
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Nyugatra egy zárt ajtó található.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Innen nem lehet nyugatra menni! (A fürdőben vagy)");
+                                    }
                                 break;
                                 
-                            case "észak": break;
-                            case "?": Console.WriteLine(Help()); break;
-                            case "leltár": break;
-                            case "mentés": break;
+                            case "észak":
+                                    if (Allohely.Last() == "nappali")
+                                    {
+                                        Allohely.Add("nappali");
+                                        if (Ablak.LathatoE == false)
+                                        {
+                                            Console.WriteLine("Innen nem lehet északra menni!");
+                                        }
+                                        else
+                                        {
+                                            Keszvane = true;
+                                            Console.WriteLine("Gratulálok! Sikerült kijutnod a szobából. :)");
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Innen nem lehet északra menni!");
+                                    }
+                                break; 
+                                
+                            case "?":
+                                    Console.WriteLine(Help());
+                                break;
+
+                            case "leltár":
+                                    Console.WriteLine($"Leltár: {String.Join("; ", Leltar)}");
+                                break;
+
+                            case "mentés":
+                                    File.Delete("mentes.sav");
+                                    StreamWriter w = new StreamWriter("mentes.sav");                               
+                                    w.Write(Mentes(Leltar, Szekreny, Doboz, Kulcs, Ajto, Ablak, Furdokad, Feszitovas, Allohely.Last()));
+                                    w.Close();
+                                    Console.WriteLine("Sikeresen elmentetted!");
+                                break;
+
                             default:
-                                Console.WriteLine("Helytelen parancs!");
+                                    Console.WriteLine("Helytelen parancs!");
                                 break;
                         }
                          // nezd, kelet, nyugat, eszak, ?, leltar, mentes
