@@ -40,7 +40,7 @@ namespace Jatek
 
         static string Nemhelyes(string parancs)
         {           
-            return "Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyűt segítségért!";
+            return $"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyűt segítségért!\n";
         }
         
 
@@ -265,7 +265,7 @@ namespace Jatek
                                 break;
 
                             default:
-                                    Console.WriteLine("Helytelen parancs!\n");
+                                    Console.WriteLine($"{Nemhelyes(parancs)}\n");
                                 break;
                         }
                          // nezd, kelet, nyugat, eszak, ?, leltar, mentes   //KESZ
@@ -275,136 +275,137 @@ namespace Jatek
                     case 2: p = new Parancs(tobbparancs[0], tobbparancs[1]);
                         switch (p.Mitcsinal)
                         {
-                            case "nézd":                                   
-                                    if (Leltar.Exists(x => x == p.Miaz))
+                            case "nézd":                                                                       
+                                    switch (p.Miaz)
                                     {
-                                        switch (p.Miaz)
-                                        {
-                                            case "feszítővas":
-                                                if (!Ablak.Elvegzette)
-                                                {
-                                                    Console.WriteLine("Használd fel a feszítővasat valamire.\n");
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("A feszítővast már nem tudod mire használni.\n");
-                                                }
-                                                break;
-
-                                            case "doboz":
-                                                if (Doboz.Elvegzette)
-                                                {
-                                                    Console.WriteLine("Nem tudsz már mit csinálni a dobozzal.\n");
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("A doboz zárva van.\n");
-                                                }
-                                                break;
-
-                                            case "kulcs":
-                                                if (Ajto.Elvegzette)
-                                                {
-                                                    Console.WriteLine("Nem tudsz már mit csinálni a kulccsal.\n");
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("Használd fel a kulcsot valamire.\n");
-                                                }
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                        if (Allohely.Last() == "nappali")
-                                        {
-                                            switch (p.Miaz)
+                                        case "feszítővas":
+                                            if (!Ablak.Elvegzette)
                                             {
-                                                case "ablak":
-                                                    if (Ablak.LathatoE)
-                                                    {
-                                                        if (!Ablak.Elvegzette)
-                                                        {
-                                                            Console.WriteLine("Az ablak zárva van.\n");
-                                                        }
-                                                        else
-                                                        {
-                                                            Console.WriteLine("Az ablak nyitva van.\n");
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("Nem látsz ablakot.\n");
-                                                    }
-                                                    break;
-
-                                                case "ajtó":
-                                                    if (!Ajto.Elvegzette)
-                                                    {
-                                                        Console.WriteLine("Az ajtó zárva van.\n");
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("Az ajtó nyitva van.\n");
-                                                    }
-                                                    break;
-
-                                                case "szekrény":
-                                                    if (!Szekreny.Elvegzette)
-                                                    {
-                                                        Console.WriteLine("A szekrény ajtaja résnyire nyitva van. Próbálj meg egy másik parancsot.\n");
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Doboz.LathatoE)
-                                                        {
-                                                            Console.WriteLine("A szekrény nyitva van és látsz benne egy dobozt.\n");
-                                                        }
-                                                        else
-                                                        {
-                                                            Console.WriteLine("A szekrény nyitva van és a dobozt már felvetted.\n");
-                                                        }
-                                                    }
-                                                    break;
-
-                                                default:
-                                                    break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (p.Miaz == "fürdőkád")
-                                            {
-                                                if (!Feszitovas.LathatoE)
-                                                {
-                                                    Console.WriteLine("A fürdőkádban egy feszítővasat látsz.\n");
-                                                    Feszitovas.LathatoE = true;
-                                                    Furdokad.Elvegzette = true;
-                                                }
-                                                else
-                                                {
-                                                    if (Feszitovas.Elvegzette)
-                                                    {
-                                                        Console.WriteLine("A fürdőkád üres.\n");
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("A fürdőkádban egy feszítővas található.\n");
-                                                    }
-                                                }
+                                                Console.WriteLine("Használd fel a feszítővasat valamire.\n");
                                             }
                                             else
                                             {
-                                                if (p.Miaz == "ajtó")
-                                                {
-                                                    Console.WriteLine("Keletre egy nyitott ajtót látsz.\n");
-                                                }
+                                                Console.WriteLine("A feszítővast már nem tudod mire használni.\n");
                                             }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine($"Nem látható a/az {p.Miaz} tárgy.\n");
-                                    }
+                                        break;
+
+                                        case "doboz":
+                                            if (Doboz.Elvegzette)
+                                            {
+                                                Console.WriteLine("Nem tudsz már mit csinálni a dobozzal.\n");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("A doboz zárva van.\n");
+                                            }
+                                        break;
+
+                                        case "kulcs":
+                                            if (Ajto.Elvegzette)
+                                            {
+                                                Console.WriteLine("Nem tudsz már mit csinálni a kulccsal.\n");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Használd fel a kulcsot valamire.\n");
+                                            }
+                                        break;
+
+                                        default:
+                                                if (Allohely.Last() == "nappali")
+                                                {
+                                                    switch (p.Miaz)
+                                                    {
+                                                        case "ablak":
+                                                                if (Ablak.LathatoE)
+                                                                {
+                                                                    if (!Ablak.Elvegzette)
+                                                                    {
+                                                                        Console.WriteLine("Az ablak zárva van.\n");
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        Console.WriteLine("Az ablak nyitva van.\n");
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    Console.WriteLine("Nem látsz ablakot.\n");
+                                                                }
+                                                            break;
+
+                                                        case "ajtó":
+                                                                if (!Ajto.Elvegzette)
+                                                                {
+                                                                    Console.WriteLine("Az ajtó zárva van.\n");
+                                                                }
+                                                                else
+                                                                {
+                                                                    Console.WriteLine("Az ajtó nyitva van.\n");
+                                                                }
+                                                            break;
+
+                                                        case "szekrény":
+                                                                if (!Szekreny.Elvegzette)
+                                                                {
+                                                                    Console.WriteLine("A szekrény ajtaja résnyire nyitva van. Próbálj meg egy másik parancsot.\n");
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (Doboz.LathatoE)
+                                                                    {
+                                                                        Console.WriteLine("A szekrény nyitva van és látsz benne egy dobozt.\n");
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        Console.WriteLine("A szekrény nyitva van és a dobozt már felvetted.\n");
+                                                                    }
+                                                                }
+                                                            break;
+
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else
+                                                            {
+                                                                if (Allohely.Last() == "fürdőkád")
+                                                                {
+                                                                    if (p.Miaz == "fürdőkád")
+                                                                    {
+                                                                        if (!Feszitovas.LathatoE)
+                                                                        {
+                                                                            Console.WriteLine("A fürdőkádban egy feszítővasat látsz.\n");
+                                                                            Feszitovas.LathatoE = true;
+                                                                            Furdokad.Elvegzette = true;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (Feszitovas.Elvegzette)
+                                                                            {
+                                                                                Console.WriteLine("A fürdőkád üres.\n");
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                Console.WriteLine("A fürdőkádban egy feszítővas található.\n");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (p.Miaz == "ajtó")
+                                                                        {
+                                                                            Console.WriteLine("Keletre egy nyitott ajtót látsz.\n");
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    Console.WriteLine($"Nem látható a/az {p.Miaz} tárgy.\n");
+                                                                }   
+                                                            }
+                                            break;
+                                    }                                   
                                 break;
 
                             case "húzd":
@@ -571,15 +572,14 @@ namespace Jatek
                                 break;
 
                             default:
-                                Console.WriteLine($"({Nemhelyes(parancs)})\n");
+                                Console.WriteLine($"{Nemhelyes(parancs)}\n");
                                 break;
                         }
                         // nezd, huzd, nyisd, vedd fel, tedd le
                         break;
 
 
-                    case 3: p = new Parancs(tobbparancs[0], tobbparancs[1], tobbparancs[2]);
-                        
+                    case 3: p = new Parancs(tobbparancs[0], tobbparancs[1], tobbparancs[2]);                        
                         switch (p.Mitcsinal)
                         {
                             case "nyisd":
@@ -647,7 +647,7 @@ namespace Jatek
                                     }
                                 break;
                             default:
-                                Console.WriteLine($"({Nemhelyes(parancs)})\n");
+                                Console.WriteLine($"{Nemhelyes(parancs)}\n");
                                 break;
                         }
                          // nyisd, tord
