@@ -16,14 +16,12 @@ namespace Jatek
         public Targy()
         {
             Szoba = "";           
-            MitLehet.Add("", false);
         }
 
         public void Ertek(string szoba, string mitlehetsor, bool lathatoe, bool elvegzette)
         {
             Szoba = szoba;
             string[] seged = mitlehetsor.Split(';');
-            MitLehet.Clear();
             foreach (var item in seged)
             {
                 MitLehet.Add(item, false);
@@ -38,7 +36,6 @@ namespace Jatek
             string[] seged = sor.Split(';');
             string[] seged2 = seged[2].Replace("[", "").Replace("]", "").Replace(" ", "").Split('-');
             Szoba = seged[0];            
-            MitLehet.Clear();
             foreach (var item in seged2)
             {
                 string[] seged3 = item.Split(',');

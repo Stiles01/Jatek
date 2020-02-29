@@ -12,6 +12,13 @@ namespace Jatek
         public string Miaz { get; set; }
         public string Mithasznal { get; set; }
         string plusz;
+        List<string> BenneLehet = new List<string>()
+        {
+            "feszítővas",
+            "doboz",
+            "kulcs"
+        };
+        
 
         public Parancs(string mitcsinal)
         {
@@ -26,9 +33,18 @@ namespace Jatek
 
         public Parancs(string mitcsinal, string miaz, string mithasznal)
         {
-            Mitcsinal = mitcsinal;
-            Miaz = miaz;
-            Mithasznal = mithasznal;
+            if (BenneLehet.Exists(x=>x == mithasznal))
+            {
+                Mitcsinal = mitcsinal;
+                Miaz = miaz;
+                Mithasznal = mithasznal;
+            }
+            else
+            {
+                Mitcsinal = mitcsinal;
+                Miaz = mithasznal;
+                Mithasznal = miaz;
+            }
         }
 
         
