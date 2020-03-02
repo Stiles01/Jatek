@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,13 +13,13 @@ namespace Jatek
 
         static string Betolt(string sor)
         {
-            if (sor == "√∫j")
+            if (sor == "˙j")
             {
                 return "false";
             }
             else
             {
-                if (sor == "ment√©s")
+                if (sor == "mentÈs")
                 {
                     return "true";
                 }
@@ -40,21 +40,21 @@ namespace Jatek
 
         static string Nemhelyes(string parancs)
         {           
-            return $"Nem j√≥l adtad meg a ({parancs}) parancsot. Nyomd le a ? billenty≈±t seg√≠ts√©g√©rt!\n";
+            return $"Nem jÛl adtad meg a ({parancs}) parancsot. Nyomd le a ? billenty˚t segÌtsÈgÈrt!\n";
         }
         
 
         static string Help()
         {
             
-            return "A helyes utas√≠t√°ssorozat: \nmit csin√°lunk / mivel (nem k√∂telez≈ë) / mit haszn√°lunk hozz√° (nem k√∂telez≈ë)\n\nParancsok:\t? (0) / lelt√°r (0) / ment√©s (0)\nIr√°nyok:\tkelet (0) / nyugat (0) / √©szak (0)\nCselekm√©nyek:\tn√©zd (0 vagy 1) / vedd fel (1) / tedd le (1) / nyisd (1 vagy 2) / h√∫zd (1) / t√∂rd (2)\n\nnem kell ut√°na param√©tert √≠rni: (0)\tegy param√©tert lehet ut√°na √≠rni: (1)\tk√©t param√©tert lehet ut√°na √≠rni: (2)\n";
+            return "A helyes utasÌt·ssorozat: \nmit csin·lunk / mivel (nem kˆtelezı) / mit haszn·lunk hozz· (nem kˆtelezı)\n\nParancsok:\t? (0) / lelt·r (0) / mentÈs (0)\nIr·nyok:\tkelet (0) / nyugat (0) / Èszak (0)\nCselekmÈnyek:\tnÈzd (0 vagy 1) / vedd fel (1) / tedd le (1) / nyisd (1 vagy 2) / h˙zd (1) / tˆrd (2)\n\nnem kell ut·na paramÈtert Ìrni: (0)\tegy paramÈtert lehet ut·na Ìrni: (1)\tkÈt paramÈtert lehet ut·na Ìrni: (2)\n";
         }
 
 
         static void Main(string[] args)
         {
-            //K√©sz√≠tette: Nagy Vikt√≥ria
-            //J√°t√©k neve: Szabadul√≥-szoba
+            //KÈszÌtette: Nagy ViktÛria
+            //J·tÈk neve: SzabadulÛ-szoba
 
             bool Keszvane = false;
             Parancs p;
@@ -71,7 +71,7 @@ namespace Jatek
             
 
             
-            Console.WriteLine("√öj j√°t√©kot kezdesz vagy bet√∂lt√∂d a m√°r meglev≈ë ment√©sed?\n√∫j/ment√©s");          
+            Console.WriteLine("⁄j j·tÈkot kezdesz vagy betˆltˆd a m·r meglevı mentÈsed?\n˙j/mentÈs");          
             string a = Betolt(Console.ReadLine());
             
 
@@ -79,13 +79,13 @@ namespace Jatek
             {
                 if (a == "false")
                 {
-                    Szekreny.Ertek("nappali", "nyisd;n√©zd;h√∫zd", true, false);                   
-                    Doboz.Ertek("nappali", "nyisd;n√©zd", false, false);
-                    Kulcs.Ertek("nappali", "vedd fel;tedd le;n√©zd", false, true);
-                    Ajto.Ertek("nappali", "nyisd;n√©zd", true, false);
-                    Ablak.Ertek("nappali", "n√©zd;t√∂rd", false, false);
-                    Furdokad.Ertek("f√ºrd≈ë", "n√©zd", false, false);
-                    Feszitovas.Ertek("f√ºrd≈ë", "n√©zd;vedd fel;tedd le", false, true);
+                    Szekreny.Ertek("nappali", true, false);                   
+                    Doboz.Ertek("nappali", false, false);
+                    Kulcs.Ertek("nappali", false, true);
+                    Ajto.Ertek("nappali", true, false);
+                    Ablak.Ertek("nappali", false, false);
+                    Furdokad.Ertek("f¸rdı", false, false);
+                    Feszitovas.Ertek("f¸rdı", false, true);
                     Allohely.Add("nappali");
                     Leltar.Clear();
                     break;
@@ -94,7 +94,7 @@ namespace Jatek
                 {
                     if (a == "true")
                     {
-                        StreamReader r = new StreamReader("mentes.sav");
+                        StreamReader r = new StreamReader("mentes.sav", Encoding.UTF8);
                         string c = r.ReadLine();
                         if (c != "")
                         {
@@ -116,13 +116,13 @@ namespace Jatek
                     }
                     else
                     {
-                        Console.WriteLine("√∫j vagy ment√©s?");
+                        Console.WriteLine("˙j vagy mentÈs?");
                         a = Betolt(Console.ReadLine());
                         continue;
                     }
                 }
             }
-            Console.WriteLine("Ha b√°rmikor elakadn√°l nyomd meg a \"?\" billenty≈±t!");
+            Console.WriteLine("Ha b·rmikor elakadn·l nyomd meg a \"?\" billenty˚t!");
 
 
             while (!Keszvane)
@@ -142,49 +142,59 @@ namespace Jatek
                     case 1: p = new Parancs(tobbparancs[0]);
                         switch (p.Mitcsinal)
                         {
-                            case "n√©zd":
+                            case "nÈzd":
                                     if (Allohely.Last()=="nappali")
                                     {                                    
                                         if (Ablak.LathatoE == false)
                                         {
-                                            Console.WriteLine("A nappaliban vagy. L√°tsz egy szekr√©nyt √©s egy ajt√≥t nyugatra.\n");
+                                            Console.WriteLine("A nappaliban vagy. L·tsz egy szekrÈnyt Ès egy ajtÛt nyugatra.\n");
                                         }
                                         else
                                         {
-                                            Console.WriteLine("A nappaliban vagy. L√°tsz egy szekr√©nyt, egy ablakot √©szakra √©s egy ajt√≥t nyugatra.\n");
+                                            Console.WriteLine("A nappaliban vagy. L·tsz egy szekrÈnyt, egy ablakot Èszakra Ès egy ajtÛt nyugatra.\n");
                                         }
                                     }
                                     else
                                     {
-                                        if (!Furdokad.Elvegzette)
+                                        if (Allohely.Last() == "f¸rdı")
                                         {
-                                            Console.WriteLine("A f√ºrd≈ëben vagy. L√°tsz egy f√ºrd≈ëk√°dat √©s egy ajt√≥t keletre.\n");
-                                        }
-                                        else
-                                        {
-                                            if (!Leltar.Exists(x=>x == "fesz√≠t≈ëvas"))
+                                            if (!Furdokad.Elvegzette)
                                             {
-                                                Console.WriteLine("A f√ºrd≈ëben vagy. L√°tsz egy f√ºrd≈ëk√°dat, benne egy fesz√≠t≈ëvasat √©s egy ajt√≥t keletre.\n");
+                                                if (!Leltar.Exists(x => x == "feszÌtıvas"))
+                                                {
+                                                    Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat, benne egy feszÌtıvasat Ès egy ajtÛt keletre.\n");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat Ès egy ajtÛt keletre.\n");
+                                                }
                                             }
                                             else
                                             {
-                                                Console.WriteLine("A f√ºrd≈ëben vagy. L√°tsz egy f√ºrd≈ëk√°dat √©s egy ajt√≥t keletre.\n");
+                                                if (!Leltar.Exists(x => x == "feszÌtıvas"))
+                                                {
+                                                    Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat, benne egy feszÌtıvasat Ès egy ajtÛt keletre.\n");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat Ès egy ajtÛt keletre.\n");
+                                                }
                                             }
-                                        }
+                                        }    
                                     }
                                 break;
 
                             case "kelet":
-                                    if (Allohely.Last()=="f√ºrd≈ë")
+                                    if (Allohely.Last()=="f¸rdı")
                                     {
                                         Allohely.Add("nappali");
                                         if (Ablak.LathatoE == false)
                                         {
-                                            Console.WriteLine("A nappaliban vagy. L√°tsz egy szekr√©nyt √©s egy ajt√≥t nyugatra.\n");
+                                            Console.WriteLine("A nappaliban vagy. L·tsz egy szekrÈnyt Ès egy ajtÛt nyugatra.\n");
                                         }
                                         else
                                         {
-                                            Console.WriteLine("A nappaliban vagy. L√°tsz egy szekr√©nyt, egy ablakot √©szakra √©s egy ajt√≥t nyugatra.\n");
+                                            Console.WriteLine("A nappaliban vagy. L·tsz egy szekrÈnyt, egy ablakot Èszakra Ès egy ajtÛt nyugatra.\n");
                                         }
                                     
                                     }
@@ -199,29 +209,29 @@ namespace Jatek
                                     {
                                         if (Ajto.Elvegzette == true)
                                         {   
-                                            Allohely.Add("f√ºrd≈ë");
+                                            Allohely.Add("f¸rdı");
                                             if (Feszitovas.LathatoE == false)
                                             {
-                                                Console.WriteLine("A f√ºrd≈ëben vagy. L√°tsz egy f√ºrd≈ëk√°dat √©s egy ajt√≥t keletre.\n");
+                                                Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat Ès egy ajtÛt keletre.\n");
                                             }
                                             else
                                             {
-                                                Console.WriteLine("A f√ºrd≈ëben vagy. L√°tsz egy f√ºrd≈ëk√°dat, benne egy fesz√≠t≈ëvasat √©s egy ajt√≥t nyugatra.\n");
+                                                Console.WriteLine("A f¸rdıben vagy. L·tsz egy f¸rdık·dat, benne egy feszÌtıvasat Ès egy ajtÛt nyugatra.\n");
                                             }
                                         
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Nyugatra egy z√°rt ajt√≥ tal√°lhat√≥.\n");
+                                            Console.WriteLine("Nyugatra egy z·rt ajtÛ tal·lhatÛ.\n");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Innen nem lehet nyugatra menni! (A f√ºrd≈ëben vagy)\n");
+                                        Console.WriteLine("Innen nem lehet nyugatra menni! (A f¸rdıben vagy)\n");
                                     }
                                 break;
                                 
-                            case "√©szak":
+                            case "Èszak":
                                     if (Allohely.Last() == "nappali")
                                     {
                                         Allohely.Add("nappali");
@@ -229,22 +239,22 @@ namespace Jatek
                                         {
                                             if (Ablak.Elvegzette == false)
                                             {
-                                                Console.WriteLine("√âszakon egy z√°rt ablakot l√°tsz.\n");
+                                                Console.WriteLine("…szakon egy z·rt ablakot l·tsz.\n");
                                             }
                                             else
                                             {
                                                 Keszvane = true;
-                                                Console.WriteLine("Gratul√°lok! Siker√ºlt kijutnod a szob√°b√≥l. :)\n");
+                                                Console.WriteLine("Gratul·lok! Siker¸lt kijutnod a szob·bÛl. :)\n");
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Innen nem lehet √©szakra menni.\n");
+                                            Console.WriteLine("Innen nem lehet Èszakra menni.\n");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Innen nem lehet √©szakra menni!\n");
+                                        Console.WriteLine("Innen nem lehet Èszakra menni!\n");
                                     }
                                 break; 
                                 
@@ -252,11 +262,11 @@ namespace Jatek
                                     Console.WriteLine(Help());
                                 break;
 
-                            case "lelt√°r":
-                                    Console.WriteLine($"Lelt√°r: {String.Join("; ", Leltar)}\n");
+                            case "lelt·r":
+                                    Console.WriteLine($"Lelt·r: {String.Join("; ", Leltar)}\n");
                                 break;
 
-                            case "ment√©s":
+                            case "mentÈs":
                                     File.Delete("mentes.sav");
                                     StreamWriter w = new StreamWriter("mentes.sav");                               
                                     w.Write(Mentes(Leltar, Szekreny, Doboz, Kulcs, Ajto, Ablak, Furdokad, Feszitovas, Allohely.Last()));
@@ -275,39 +285,39 @@ namespace Jatek
                     case 2: p = new Parancs(tobbparancs[0], tobbparancs[1]);
                         switch (p.Mitcsinal)
                         {
-                            case "n√©zd":                                                                       
+                            case "nÈzd":                                                                       
                                     switch (p.Miaz)
                                     {
-                                        case "fesz√≠t≈ëvas":
+                                        case "feszÌtıvas":
                                             if (!Ablak.Elvegzette)
                                             {
-                                                Console.WriteLine("Haszn√°ld fel a fesz√≠t≈ëvasat valamire.\n");
+                                                Console.WriteLine("Haszn·ld fel a feszÌtıvasat valamire.\n");
                                             }
                                             else
                                             {
-                                                Console.WriteLine("A fesz√≠t≈ëvast m√°r nem tudod mire haszn√°lni.\n");
+                                                Console.WriteLine("A feszÌtıvast m·r nem tudod mire haszn·lni.\n");
                                             }
                                         break;
 
                                         case "doboz":
                                             if (Doboz.Elvegzette)
                                             {
-                                                Console.WriteLine("Nem tudsz m√°r mit csin√°lni a dobozzal.\n");
+                                                Console.WriteLine("Nem tudsz m·r mit csin·lni a dobozzal.\n");
                                             }
                                             else
                                             {
-                                                Console.WriteLine("A doboz z√°rva van.\n");
+                                                Console.WriteLine("A doboz z·rva van.\n");
                                             }
                                         break;
 
                                         case "kulcs":
                                             if (Ajto.Elvegzette)
                                             {
-                                                Console.WriteLine("Nem tudsz m√°r mit csin√°lni a kulccsal.\n");
+                                                Console.WriteLine("Nem tudsz m·r mit csin·lni a kulccsal.\n");
                                             }
                                             else
                                             {
-                                                Console.WriteLine("Haszn√°ld fel a kulcsot valamire.\n");
+                                                Console.WriteLine("Haszn·ld fel a kulcsot valamire.\n");
                                             }
                                         break;
 
@@ -321,7 +331,7 @@ namespace Jatek
                                                                 {
                                                                     if (!Ablak.Elvegzette)
                                                                     {
-                                                                        Console.WriteLine("Az ablak z√°rva van.\n");
+                                                                        Console.WriteLine("Az ablak z·rva van.\n");
                                                                     }
                                                                     else
                                                                     {
@@ -330,35 +340,35 @@ namespace Jatek
                                                                 }
                                                                 else
                                                                 {
-                                                                    Console.WriteLine("Nem l√°tsz ablakot.\n");
+                                                                    Console.WriteLine("Nem l·tsz ablakot.\n");
                                                                 }
                                                             break;
 
-                                                        case "ajt√≥":
+                                                        case "ajtÛ":
                                                                 if (!Ajto.Elvegzette)
                                                                 {
-                                                                    Console.WriteLine("Az ajt√≥ z√°rva van.\n");
+                                                                    Console.WriteLine("Az ajtÛ z·rva van.\n");
                                                                 }
                                                                 else
                                                                 {
-                                                                    Console.WriteLine("Az ajt√≥ nyitva van.\n");
+                                                                    Console.WriteLine("Az ajtÛ nyitva van.\n");
                                                                 }
                                                             break;
 
-                                                        case "szekr√©ny":
+                                                        case "szekrÈny":
                                                                 if (!Szekreny.Elvegzette)
                                                                 {
-                                                                    Console.WriteLine("A szekr√©ny ajtaja r√©snyire nyitva van. Pr√≥b√°lj meg egy m√°sik parancsot.\n");
+                                                                    Console.WriteLine("A szekrÈny ajtaja rÈsnyire nyitva van. PrÛb·lj meg egy m·sik parancsot.\n");
                                                                 }
                                                                 else
                                                                 {
                                                                     if (Doboz.LathatoE)
                                                                     {
-                                                                        Console.WriteLine("A szekr√©ny nyitva van √©s l√°tsz benne egy dobozt.\n");
+                                                                        Console.WriteLine("A szekrÈny nyitva van Ès l·tsz benne egy dobozt.\n");
                                                                     }
                                                                     else
                                                                     {
-                                                                        Console.WriteLine("A szekr√©ny nyitva van √©s a dobozt m√°r felvetted.\n");
+                                                                        Console.WriteLine("A szekrÈny nyitva van Ès a dobozt m·r felvetted.\n");
                                                                     }
                                                                 }
                                                             break;
@@ -368,69 +378,62 @@ namespace Jatek
                                                     }
                                                 }
                                                 else
+                                                {
+                                                    if (p.Miaz == "f¸rdık·d")
+                                                    {
+                                                        if (!Feszitovas.LathatoE)
+                                                        {
+                                                            Console.WriteLine("A f¸rdık·dban egy feszÌtıvasat l·tsz.\n");
+                                                            Feszitovas.LathatoE = true;
+                                                            Furdokad.Elvegzette = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Feszitovas.Elvegzette)
                                                             {
-                                                                if (Allohely.Last() == "f√ºrd≈ëk√°d")
-                                                                {
-                                                                    if (p.Miaz == "f√ºrd≈ëk√°d")
-                                                                    {
-                                                                        if (!Feszitovas.LathatoE)
-                                                                        {
-                                                                            Console.WriteLine("A f√ºrd≈ëk√°dban egy fesz√≠t≈ëvasat l√°tsz.\n");
-                                                                            Feszitovas.LathatoE = true;
-                                                                            Furdokad.Elvegzette = true;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            if (Feszitovas.Elvegzette)
-                                                                            {
-                                                                                Console.WriteLine("A f√ºrd≈ëk√°d √ºres.\n");
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                Console.WriteLine("A f√ºrd≈ëk√°dban egy fesz√≠t≈ëvas tal√°lhat√≥.\n");
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        if (p.Miaz == "ajt√≥")
-                                                                        {
-                                                                            Console.WriteLine("Keletre egy nyitott ajt√≥t l√°tsz.\n");
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    Console.WriteLine($"Nem l√°that√≥ a/az {p.Miaz} t√°rgy.\n");
-                                                                }   
+                                                                Console.WriteLine("A f¸rdık·d ¸res.\n");
                                                             }
+                                                            else
+                                                            {
+                                                                Console.WriteLine("A f¸rdık·dban egy feszÌtıvas tal·lhatÛ.\n");
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (p.Miaz == "ajtÛ")
+                                                        {
+                                                            Console.WriteLine("Keletre egy nyitott ajtÛt l·tsz.\n");
+                                                        }
+                                                    }
+                                                }
                                             break;
                                     }                                   
                                 break;
 
-                            case "h√∫zd":
+                            case "h˙zd":
                                     if (Allohely.Last()=="nappali")
                                     {
-                                        if (p.Miaz=="szekr√©ny")
+                                        if (p.Miaz=="szekrÈny")
                                         {
                                             if (!Ablak.LathatoE)
                                             {
-                                                Console.WriteLine("Elh√∫ztad a szekr√©nyt, most l√°tsz valamit m√∂g√∂tte. √çrd be a 'n√©zd' parancsot, hogy megtudd mi az.\n");
+                                                Console.WriteLine("Elh˙ztad a szekrÈnyt, most l·tsz valamit mˆgˆtte. Õrd be a 'nÈzd' parancsot, hogy megtudd mi az.\n");
                                                 Ablak.LathatoE = true;
                                             }
                                             else
                                             {
-                                                Console.WriteLine("Elh√∫ztad m√°r a szekr√©nyt!\n");
+                                                Console.WriteLine("Elh˙ztad m·r a szekrÈnyt!\n");
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"Nem tudod elh√∫zni a/az {p.Miaz}-t, pr√≥b√°lj meg valami m√°st.\n");
+                                            Console.WriteLine($"Nem tudod elh˙zni a/az {p.Miaz}-t, prÛb·lj meg valami m·st.\n");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine($"Nem tudod elh√∫zni a/az {p.Miaz}-t, pr√≥b√°lj meg valami m√°st.\n");
+                                        Console.WriteLine($"Nem tudod elh˙zni a/az {p.Miaz}-t, prÛb·lj meg valami m·st.\n");
                                     }
                                 break;
 
@@ -440,46 +443,46 @@ namespace Jatek
                                         if (Leltar.Exists(x => x == "doboz"))
                                         {
                                             Kulcs.LathatoE = true;
-                                            Console.WriteLine("A dobozt kinyitottad, egy kulcsot l√°tsz.\n");
+                                            Console.WriteLine("A dobozt kinyitottad, egy kulcsot l·tsz.\n");
                                         }
                                         else
                                         {
-                                            Console.WriteLine("M√©g nem vetted fel a dobozt.\n");
+                                            Console.WriteLine("MÈg nem vetted fel a dobozt.\n");
                                         }
                                     }
                                     else
                                     {
                                         if (Allohely.Last() == "nappali")
                                         {
-                                            if (p.Miaz == "szekr√©ny")
+                                            if (p.Miaz == "szekrÈny")
                                             {
                                                 if (!Szekreny.Elvegzette)
                                                 {
                                                     Szekreny.Elvegzette = true;
                                                     Doboz.LathatoE = true;
-                                                    Console.WriteLine("Kinyitottad a szekr√©nyt, l√°tsz benne egy dobozt.\n");
+                                                    Console.WriteLine("Kinyitottad a szekrÈnyt, l·tsz benne egy dobozt.\n");
                                                 }
                                                 else
                                                 {
                                                     if (!Doboz.Elvegzette)
                                                     {
-                                                        Console.WriteLine("A szekr√©nyt m√°r kinyitottad, l√°tsz benne egy dobozt.\n");
+                                                        Console.WriteLine("A szekrÈnyt m·r kinyitottad, l·tsz benne egy dobozt.\n");
                                                     }
                                                     else
                                                     {
-                                                        Console.WriteLine("A szekr√©nyt m√°r kinyitottad √©s a dobozt m√°r felvetted.\n");
+                                                        Console.WriteLine("A szekrÈnyt m·r kinyitottad Ès a dobozt m·r felvetted.\n");
                                                     }
 
                                                 }
                                             }
                                             else
                                             {
-                                                Console.WriteLine($"A {p.Miaz} t√°rgy nem nyithat√≥. Pr√≥b√°lj meg m√°st.\n");
+                                                Console.WriteLine($"A {p.Miaz} t·rgy nem nyithatÛ. PrÛb·lj meg m·st.\n");
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"A {p.Miaz} t√°rgy nem nyithat√≥. Pr√≥b√°lj meg m√°st.\n");
+                                            Console.WriteLine($"A {p.Miaz} t·rgy nem nyithatÛ. PrÛb·lj meg m·st.\n");
                                         }
                                     }                                                                      
                                 break;
@@ -496,7 +499,7 @@ namespace Jatek
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine("Nem l√°tsz kulcsot.\n");
+                                                    Console.WriteLine("Nem l·tsz kulcsot.\n");
                                                 }
                                             break;
                                         case "doboz":
@@ -510,31 +513,31 @@ namespace Jatek
                                                     }
                                                     else
                                                     {
-                                                        Console.WriteLine("Nem l√°tsz dobozt.\n");
+                                                        Console.WriteLine("Nem l·tsz dobozt.\n");
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine("Nem l√°tsz dobozt.\n");
+                                                    Console.WriteLine("Nem l·tsz dobozt.\n");
                                                 }
                                             break;
-                                        case "fesz√≠t≈ëvas":
-                                                if (Allohely.Last() == "f√ºrd≈ë")
+                                        case "feszÌtıvas":
+                                                if (Allohely.Last() == "f¸rdı")
                                                 {
                                                     if (Feszitovas.LathatoE)
                                                     {
                                                         Feszitovas.Elvegzette = true;
                                                         Leltar.Add(p.Miaz);
-                                                        Console.WriteLine("Felvetted a fesz√≠t≈ëvasat.\n");
+                                                        Console.WriteLine("Felvetted a feszÌtıvasat.\n");
                                                     }
                                                     else
                                                     {
-                                                        Console.WriteLine("Nem l√°tsz fesz√≠t≈ëvasat.\n");
+                                                        Console.WriteLine("Nem l·tsz feszÌtıvasat.\n");
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine("Nem l√°tsz fesz√≠t≈ëvasat.\n");
+                                                    Console.WriteLine("Nem l·tsz feszÌtıvasat.\n");
                                                 }
                                             break;
                                         default:
@@ -546,7 +549,7 @@ namespace Jatek
                             case "tedd le":
                                     if (Leltar.Exists(x=>x == p.Miaz))
                                     {
-                                        Console.Write("Ha leteszel egy t√°rgyat ut√°na m√°r nem tudod √∫jra felvenni, biztos leteszed?\nigen/nem\n");
+                                        Console.Write("Ha leteszel egy t·rgyat ut·na m·r nem tudod ˙jra felvenni, biztos leteszed?\nigen/nem\n");
                                         string sege = Console.ReadLine();
                                         if (sege == "igen")
                                         {
@@ -561,13 +564,13 @@ namespace Jatek
                                             }
                                             else
                                             {
-                                                Console.WriteLine($"Hib√°san √≠rtad be, nem tett√©l le semmit.\n");
+                                                Console.WriteLine($"Hib·san Ìrtad be, nem tettÈl le semmit.\n");
                                             }
                                         }                                       
                                     }
                                     else
                                     {
-                                        Console.WriteLine($"Nem tal√°lhat√≥ a lelt√°radban {p.Miaz}.\n");
+                                        Console.WriteLine($"Nem tal·lhatÛ a lelt·radban {p.Miaz}.\n");
                                     }
                                 break;
 
@@ -585,23 +588,23 @@ namespace Jatek
                             case "nyisd":
                                     if (Allohely.Last() == "nappali")
                                     {
-                                        if (p.Miaz == "ajt√≥")
+                                        if (p.Miaz == "ajtÛ")
                                         {
                                             if (!Ajto.Elvegzette)
                                             {
                                                 if (Kulcs.Elvegzette)
                                                 {
                                                     Ajto.Elvegzette = true;
-                                                    Console.WriteLine("Az ajt√≥t kinyitottad.\n");
+                                                    Console.WriteLine("Az ajtÛt kinyitottad.\n");
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel kinyitni az ajt√≥t. Keress m√°st hozz√°!\n");
+                                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel kinyitni az ajtÛt. Keress m·st hozz·!\n");
                                                 }
                                             }
                                             else
                                             {
-                                                Console.WriteLine("Az ajt√≥ m√°r nyitva van.\n");
+                                                Console.WriteLine("Az ajtÛ m·r nyitva van.\n");
                                             }
                                         }
                                         else
@@ -614,7 +617,7 @@ namespace Jatek
                                         Console.WriteLine($"Nem tudod {p.Miaz}-t kinyitni {p.Mithasznal}-val/vel.\n");
                                     }
                                 break;
-                            case "t√∂rd":
+                            case "tˆrd":
                                     if (Allohely.Last() == "nappali")
                                     {
                                         if (p.Miaz == "ablak")
@@ -623,27 +626,27 @@ namespace Jatek
                                             {
                                                 if (Feszitovas.Elvegzette)
                                                 {
-                                                    Console.WriteLine("Az ablakot bet√∂rted.\n");
+                                                    Console.WriteLine("Az ablakot betˆrted.\n");
                                                     Ablak.Elvegzette = true;
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel bet√∂rni az ablakot.\n");
+                                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betˆrni az ablakot.\n");
                                                 }
                                             }
                                             else
                                             {
-                                                Console.WriteLine($"Nem l√°tsz ablakot, amit bet√∂rhetn√©l.\n");
+                                                Console.WriteLine($"Nem l·tsz ablakot, amit betˆrhetnÈl.\n");
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel bet√∂rni a/az {p.Miaz}-t.\n");
+                                            Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betˆrni a/az {p.Miaz}-t.\n");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel bet√∂rni a/az {p.Miaz}-t.\n");
+                                        Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betˆrni a/az {p.Miaz}-t.\n");
                                     }
                                 break;
                             default:
@@ -655,7 +658,7 @@ namespace Jatek
 
 
                     default:
-                        Console.WriteLine("Helytelen parancsot adt√°l meg:\nmit csin√°lsz / mivel (nem k√∂telez≈ë) / mit haszn√°lsz hozz√° (nem k√∂telez≈ë)\n");                       
+                        Console.WriteLine("Helytelen parancsot adt·l meg:\nmit csin·lsz / mivel (nem kˆtelezı) / mit haszn·lsz hozz· (nem kˆtelezı)\n");                       
                         break;
                 }
             }

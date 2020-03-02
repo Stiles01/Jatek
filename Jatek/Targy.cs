@@ -10,7 +10,6 @@ namespace Jatek
     {
         public string Szoba { get; set; }
         public bool LathatoE { get; set; }
-        public Dictionary<string, bool> MitLehet = new Dictionary<string, bool>();
         public bool Elvegzette { get; set; }
 
         public Targy()
@@ -18,14 +17,9 @@ namespace Jatek
             Szoba = "";           
         }
 
-        public void Ertek(string szoba, string mitlehetsor, bool lathatoe, bool elvegzette)
+        public void Ertek(string szoba, bool lathatoe, bool elvegzette)
         {
-            Szoba = szoba;
-            string[] seged = mitlehetsor.Split(';');
-            foreach (var item in seged)
-            {
-                MitLehet.Add(item, false);
-            }
+            Szoba = szoba;           
             LathatoE = lathatoe;
             Elvegzette = elvegzette;
             
@@ -33,22 +27,15 @@ namespace Jatek
 
         public void ErtekBetoltes(string sor)
         {
-            string[] seged = sor.Split(';');
-            string[] seged2 = seged[2].Replace("[", "").Replace("]", "").Replace(" ", "").Split('-');
-            Szoba = seged[0];            
-            foreach (var item in seged2)
-            {
-                string[] seged3 = item.Split(',');
-                MitLehet.Add(seged3[0], bool.Parse(seged3[1]));
-            }
+            string[] seged = sor.Split(';');            
+            Szoba = seged[0];                       
             LathatoE = bool.Parse(seged[1]);
-            Elvegzette = bool.Parse(seged[3]);
+            Elvegzette = bool.Parse(seged[2]);
         }
 
         public string Menteshez()
         {
-            string a = String.Join("-", MitLehet);
-            return String.Join(";", Szoba, LathatoE, a, Elvegzette);
+            return String.Join(";", Szoba, LathatoE, Elvegzette);
         }
 
         
