@@ -9,33 +9,21 @@ namespace Jatek
     class Targy
     {
         public string Szoba { get; set; }
-        public bool LathatoE { get; set; }
-        public bool Elvegzette { get; set; }
+        public Dictionary<string, bool> Tulajdonsagok = new Dictionary<string, bool>();
 
-        public Targy()
+        public Targy(string sor)
         {
-            Szoba = "";           
+            string[] seged = sor.Split(';');
+            Szoba = seged[0];
+            Tulajdonsagok.Add("lathatoe", bool.Parse(seged[1]));
+            Tulajdonsagok.Add("hasznalhatoe", bool.Parse(seged[2]));
+            Tulajdonsagok.Add("elvegzette", bool.Parse(seged[3]));
         }
 
-        public void Ertek(string szoba, bool lathatoe, bool elvegzette)
-        {
-            Szoba = szoba;           
-            LathatoE = lathatoe;
-            Elvegzette = elvegzette;
-            
-        }
-
-        public void ErtekBetoltes(string sor)
-        {
-            string[] seged = sor.Split(';');            
-            Szoba = seged[0];                       
-            LathatoE = bool.Parse(seged[1]);
-            Elvegzette = bool.Parse(seged[2]);
-        }
 
         public string Menteshez()
         {
-            return String.Join(";", Szoba, LathatoE, Elvegzette);
+            return String.Join(";", Szoba, Tulajdonsagok.Values);
         }
 
         

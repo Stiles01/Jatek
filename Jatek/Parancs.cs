@@ -11,41 +11,42 @@ namespace Jatek
         public string Mitcsinal { get; set; }
         public string Miaz { get; set; }
         public string Mithasznal { get; set; }
-        string plusz;
-        List<string> BenneLehet = new List<string>()
-        {
-            "feszítővas",
-            "doboz",
-            "kulcs"
-        };
         
-
-        public Parancs(string mitcsinal)
+        
+        public Parancs(string sor)
         {
-            Mitcsinal = mitcsinal;
-        }
-
-        public Parancs(string mitcsinal, string miaz)
-        {
-            Mitcsinal = mitcsinal;
-            Miaz = miaz;
-        }
-
-        public Parancs(string mitcsinal, string miaz, string mithasznal)
-        {
-            if (BenneLehet.Exists(x=>x == mithasznal))
+            string[] seged = sor.Split(' ');
+            switch (seged.Length)
             {
-                Mitcsinal = mitcsinal;
-                Miaz = miaz;
-                Mithasznal = mithasznal;
-            }
-            else
-            {
-                Mitcsinal = mitcsinal;
-                Miaz = mithasznal;
-                Mithasznal = miaz;
-            }
+                case 1:
+                    Mitcsinal = seged[0];
+                    break;
+                case 2:
+                    Mitcsinal = seged[0];
+                    Miaz = seged[1];
+                    break;
+                case 3:
+                    Mitcsinal = seged[0];
+                    Miaz = seged[1];
+                    Mithasznal = seged[2];
+                    break;
+                case 4:
+                    Mitcsinal = seged[0] + seged[1];
+                    Miaz = seged[2];
+                    Mithasznal = seged[3];
+                    break;
+                default:
+                    Mitcsinal = "";
+                    break;
+            }            
         }
+
+        public bool Helyes()
+        {
+
+        }
+
+        
 
         
 
