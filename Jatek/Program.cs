@@ -38,10 +38,10 @@ namespace Jatek
         }
         
 
-        static string Nemhelyes(string parancs)
-        {           
-            return $"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n";
-        }
+        //static string Nemhelyes(string parancs)
+        //{           
+        //    return $"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n";
+        //}
         
 
         static string Help()
@@ -129,13 +129,23 @@ namespace Jatek
             {
                 string parancs = Console.ReadLine().Trim();               
                 string[] tobbparancs = parancs.Split(' ');
-                if (tobbparancs[0] == "vedd" || tobbparancs[0] == "tedd")
+                //if (tobbparancs[0] == "vedd" || tobbparancs[0] == "tedd")
+                //{
+                //    string vmi = String.Join(" ", tobbparancs[0], tobbparancs[1]);
+                //    string vmi2 = tobbparancs[2];
+                //    tobbparancs = new string[2];
+                //    tobbparancs[0] = vmi;
+                //    tobbparancs[1] = vmi2;
+                //}
+                while (!p.Helyes())
                 {
-                    string vmi = String.Join(" ", tobbparancs[0], tobbparancs[1]);
-                    string vmi2 = tobbparancs[2];
-                    tobbparancs = new string[2];
-                    tobbparancs[0] = vmi;
-                    tobbparancs[1] = vmi2;
+                    Console.WriteLine($"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n");
+                    string seged = Console.ReadLine();
+                    p = new Parancs(seged);
+                    if (p.Mitcsinal=="?")
+                    {
+                        Console.WriteLine(Help());
+                    }                   
                 }
                 switch (tobbparancs.Length)
                 {

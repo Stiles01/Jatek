@@ -43,7 +43,14 @@ namespace Jatek
 
         public bool Helyes()
         {
-
+            if (Mitcsinal == "")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         
