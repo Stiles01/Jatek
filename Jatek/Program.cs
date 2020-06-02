@@ -31,10 +31,15 @@ namespace Jatek
         }
 
 
-        static string Mentes(List<string> leltar, Targy szekreny, Targy doboz, Targy kulcs, Targy ajto, Targy ablak, Targy furdokad, Targy feszitovas, string allohely)
+        static string Mentes(List<string> leltar, List<Targy> targyak, string allohely)
         {
             string leltarok = String.Join(";", leltar);
-            return String.Join("\n", leltarok, szekreny.Menteshez(), doboz.Menteshez(), kulcs.Menteshez(), ajto.Menteshez(), ablak.Menteshez(), furdokad.Menteshez(), feszitovas.Menteshez(), allohely);
+            List<string> mentestargyak = new List<string>();
+            foreach (var item in targyak)
+            {
+                mentestargyak.Add(item.Menteshez());
+            }
+            return String.Join("\n", leltarok, mentestargyak, allohely);
         }
         
 
@@ -120,15 +125,59 @@ namespace Jatek
                 
                 while (!p.Helyes())
                 {
-                    Console.WriteLine($"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n");
-                    string seged = Console.ReadLine();
-                    p = new Parancs(seged);
-                    if (p.Mitcsinal=="?")
+                    if (p.Mitcsinal != "?")
+                    {
+                        Console.WriteLine($"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n");
+                        string seged = Console.ReadLine();
+                        p = new Parancs(seged);
+                    }
+                    else
                     {
                         Console.WriteLine(Help());
-                    }                   
+                    }                                     
                 }
-                
+
+                if (p.Miaz=="")
+                {
+                    switch (p.Mitcsinal)
+                    {
+                        case "nézd":
+                            break;
+                        case "kelet":
+                            break;
+                        case "nyugat":
+                            break;
+                        case "észak":
+                            break;
+                        case "?":   Console.WriteLine(Help());
+                            break;
+                        case "mentés":
+                            File.Delete("mentes.sav");
+                            StreamWriter w = new StreamWriter("mentes.sav");
+                            w.Write(Mentes(Leltar, targyak, Allohely.Last()));
+                            w.Close();
+                            Console.WriteLine("Sikeresen elmentetted!\n");
+                            break;
+                        case "leltár":  Console.WriteLine($"Leltár: {String.Join("; ", Leltar)}\n");
+                            break;
+                        default:    Console.WriteLine($"Nem helyes oarancsot adtál meg: {parancs}\n");
+                            break;
+                    }
+                }
+                else
+                {
+                    bool leheteilyen = p.Leheteilyen();
+                    string szoba = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Szoba).ToString();
+
+                    if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen))
+                    {
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Nem jó a parancs, amit megadtál! Nem lehet ebben a szobában ({szoba}) vagy ebben a helyzetben használni. Ellenõrizd, amit beírtál!\n");
+                    }
+                }
                 //switch (p.Mitcsinal)
                 //        {
                 //            case "nézd":
