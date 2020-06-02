@@ -20,10 +20,13 @@ namespace Jatek
             {
                 case 1:
                     Mitcsinal = seged[0];
+                    Miaz = "";
+                    Mithasznal = "";
                     break;
                 case 2:
                     Mitcsinal = seged[0];
                     Miaz = seged[1];
+                    Mithasznal = "";
                     break;
                 case 3:
                     Mitcsinal = seged[0];
@@ -37,6 +40,8 @@ namespace Jatek
                     break;
                 default:
                     Mitcsinal = "";
+                    Miaz = "";
+                    Mithasznal = "";
                     break;
             }
         }
@@ -53,63 +58,65 @@ namespace Jatek
             }
         }
 
-        //public string Miaparancs(string allohely, bool vaneilyenmi, bool vaneilyenmit, bool lathatoe)
-        //{
-        //    if (vaneilyenmi && vaneilyenmit)
-        //    {
-        //        switch (Mitcsinal)
-        //        {
-        //            case "nézd":
-        //                if (allohely == "nappali")
-        //                {
-        //                    if (lathatoe == false)
-        //                    {
-        //                        return "A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.\n";
-        //                    }
-        //                    else
-        //                    {
-        //                        return "A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.\n";
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (allohely == "fürdő")
-        //                    {
-        //                        if (!Furdokad.Elvegzette)
-        //                        {
-        //                            if (!Leltar.Exists(x => x == "feszítővas"))
-        //                            {
-        //                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat, benne egy feszítővasat és egy ajtót keletre.\n");
-        //                            }
-        //                            else
-        //                            {
-        //                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat és egy ajtót keletre.\n");
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            if (!Leltar.Exists(x => x == "feszítővas"))
-        //                            {
-        //                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat, benne egy feszítővasat és egy ajtót keletre.\n");
-        //                            }
-        //                            else
-        //                            {
-        //                                Console.WriteLine("A fürdőben vagy. Látsz egy fürdőkádat és egy ajtót keletre.\n");
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                break;
-        //            case "":
-        //                break;
+        public bool Ellenorzes(string allohely, string szoba, bool leheteilyen)
+        {
+            if (leheteilyen && allohely == szoba)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-        //            default:
-        //                return "Nincs ilyen parancs! Nyomd le a \'? \' gombot, hogy megtudd milyen parancsokat használhatsz.";
-        //                break;
-        //        }
-        //    }
-            
-        //}
-
+        public bool Leheteilyen()
+        {
+            bool seged1 = false, seged2 = false;
+            switch (Miaz)
+            {
+                case "szekrény":
+                case "doboz":
+                case "fürdőkád":
+                case "": seged1 = true; break;
+                case "ajtó":
+                    if (Mithasznal == "kulcs")
+                    {
+                        seged2 = true;
+                    }
+                    else
+                    {
+                        seged2 = false;
+                    }
+                    break;
+                case "ablak":
+                    if (Mithasznal == "feszítővas")
+                    {
+                        seged2 = true;
+                    }
+                    else
+                    {
+                        seged2 = false;
+                    }
+                    break;
+                default: seged1 = false; break;
+            }
+            if (seged1)
+            {
+                if (seged2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
     }
 }

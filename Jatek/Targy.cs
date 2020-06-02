@@ -28,30 +28,7 @@ namespace Jatek
             return String.Join(";", Szoba, Tulajdonsagok.Values);
         }
 
-        public bool Leheteilyenmi(string miaz)
-        {
-            
-            switch (miaz)
-            {
-                case "szekrény":
-                case "doboz":
-                case "ajtó":
-                case "ablak":
-                case "fürdőkád": return true;
-                    
-                default: return false;                   
-            }
-        }
-        public bool Leheteilyenmit(string mithasznal)
-        {
-
-            switch (mithasznal)
-            {
-                case "kulcs":
-                case "feszítővas": return true;
-
-                default: return false;
-            }
-        }
+        
+        
     }
 }
