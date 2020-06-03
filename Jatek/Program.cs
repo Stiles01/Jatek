@@ -41,9 +41,50 @@ namespace Jatek
             }
             return String.Join("\n", leltarok, mentestargyak, allohely);
         }
-        
 
-      
+
+        static string Szamok(string kod)
+        {
+            string[] seged = kod.Split(' ');
+
+            switch (seged[0])
+            {
+                case "1":
+                    switch (seged[1])
+                    {                        
+                        case "ajtó":
+                            if (seged[2]=="nézd")
+                            {
+                                return "Az ajtó zárva van.+1";
+                            }
+                            else
+                            {
+                                return $"Az ajtóval nem használhatod ({seged[2]}) parancsot!";
+                            }
+                        default: return "";
+                    }
+                    
+                case "2":
+                    switch (seged[1])
+                    {
+                        case "ajtó":
+                            if (seged[2] == "nézd")
+                            {
+                                return "Az ajtó nyitva van.";
+                            }
+                            else
+                            {
+                                return $"Az ajtóval nem használhatod ({seged[2]}) parancsot!";
+                            }
+                        default: return "";
+                    }
+
+                case "3":
+
+                default: return "Nincs itt ilyen tárgy vagy még nem látható!";
+            }
+
+        }
 
         static string Help()
         {
@@ -75,13 +116,13 @@ namespace Jatek
             {
                 if (a == "false")
                 {
-                    targyak.Add(new Targy("szekrény;nappali;true;false"));
-                    targyak.Add(new Targy("doboz;nappali;false;false"));
-                    targyak.Add(new Targy("kulcs;nappali;false;false"));
-                    targyak.Add(new Targy("ajto;nappali;true;false"));
-                    targyak.Add(new Targy("ablak;nappali;false;false"));
-                    targyak.Add(new Targy("fürdõkád;fürdõ;false;false"));
-                    targyak.Add(new Targy("feszítõvas;fürdõ;false;false"));
+                    targyak.Add(new Targy("szekrény;nappali;true;true;false"));
+                    targyak.Add(new Targy("doboz;nappali;false;false;false"));
+                    targyak.Add(new Targy("kulcs;nappali;false;false;false"));
+                    targyak.Add(new Targy("ajtó;nappali;true;false;false"));
+                    targyak.Add(new Targy("ablak;nappali;false;false;false"));
+                    targyak.Add(new Targy("fürdõkád;fürdõ;false;false;false"));
+                    targyak.Add(new Targy("feszítõvas;fürdõ;false;false;false"));
                     Allohely.Add("nappali");
                     Leltar.Clear();
                     break;
@@ -127,6 +168,7 @@ namespace Jatek
                 {
                     if (p.Mitcsinal != "?")
                     {
+
                         Console.WriteLine($"Nem jól adtad meg a ({parancs}) parancsot. Nyomd le a ? billentyût segítségért!\n");
                         string seged = Console.ReadLine();
                         p = new Parancs(seged);
@@ -168,10 +210,34 @@ namespace Jatek
                 {
                     bool leheteilyen = p.Leheteilyen();
                     string szoba = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Szoba).ToString();
+                    string nev = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Nev).ToString();
+                    string lathatoe = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["lathatoe"]).ToString();
+                    string hasznalhato = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["hasznalhato"]).ToString();
+                    string elvegzette = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["elvegzette"]).ToString();
 
                     if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen))
                     {
-                        
+                        if (p.Mithasznal=="")
+                        {                            
+                            string szoveg = Szamok(p.Targyasparancs(nev, lathatoe,hasznalhato, elvegzette));
+                            if (szoveg!="")
+                            {
+                                string[] szovegseged = szoveg.Split('+');
+                                switch (szovegseged.Length)
+                                {
+                                    case 2:
+
+
+                                    default:
+                                        break;
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {
