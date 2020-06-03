@@ -117,6 +117,43 @@ namespace Jatek
                 return false;
             }
         }
-        
+
+        public string Targyasparancs(string nev, string lathatoe, string hasznalhato, string elvegzette)
+        {
+            if (lathatoe=="true")
+            {
+                if (elvegzette=="false")
+                {
+                    if (hasznalhato=="true")
+                    {
+                        return String.Join(" ", 3, nev, Mitcsinal);
+                    }
+                    else
+                    {
+                        return String.Join(" ", 1, nev, Mitcsinal);
+                    }                   
+                }
+                else
+                {
+                    if (hasznalhato == "true")
+                    {
+                        return String.Join(" ", 4, nev, Mitcsinal);
+                    }
+                    else
+                    {
+                        return String.Join(" ", 2, nev, Mitcsinal);
+                    }                   
+                }
+            }
+            else
+            {
+                return "0";
+            }
+        }
+
+        public string Tobbparancs(Dictionary<string, bool> tulajdonsagok, Dictionary<string, bool> hasznalatitargy)
+        {
+            
+        }
     }
 }
