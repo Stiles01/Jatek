@@ -31,7 +31,7 @@ namespace Jatek
         }
 
 
-        static string Mentes(List<string> leltar, List<Targy> targyak, string allohely)
+        static string Mentes(HashSet<string> leltar, List<Targy> targyak, string allohely)
         {
             string leltarok = String.Join(";", leltar);
             List<string> mentestargyak = new List<string>();
@@ -52,39 +52,154 @@ namespace Jatek
                 case "1":
                     switch (seged[1])
                     {                        
+                        case "szekrény":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "Az elhúzott szekrény résnyire nyitva van. Egy ablakot látsz mögötte.";
+                                case "húzd": return "A szekrényt már elhúztad.";
+                                case "nyisd": return "A szekrényt sikeresen kinyitottad, egy dobozt látsz benne.+2+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";                                    
+                            }
+                        case "doboz":
+                            switch (seged[2])
+                            {
+                                case "vedd fel": return "A dobozt felvetted.+0+1+2+4";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
                         case "ajtó":
-                            if (seged[2]=="nézd")
+                            switch (seged[2])
                             {
-                                return "Az ajtó zárva van.+1";
+                                case "nézd": return "Egy zárt ajtót látsz nyugatra.";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";                                   
                             }
-                            else
+                        case "ablak":
+                            switch (seged[2])
                             {
-                                return $"Az ajtóval nem használhatod ({seged[2]}) parancsot!";
+                                case "nézd": return "Az ablak zárva van.";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
                             }
+                        case "fürdõkád":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "A fürdõkádban egy feszítõvasat látsz.+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon."; 
+                            }
+                        case "kulcs":
+                            switch (seged[2])
+                            {
+                                case "vedd fel": return "A kulcsot felvetted.+0+1+2+4";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "feszítõvas":
+                            switch (seged[2])
+                            {
+                                case "vedd fel": return "A feszítõvasat felvetted.+0+1+2+4";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+
                         default: return "";
                     }
                     
                 case "2":
                     switch (seged[1])
                     {
+                        case "szekrény":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "Az elhúzott szekrény nyitva van.+5";
+                                case "húzd": return "A szekrényt már elhúztad.";
+                                case "nyisd": return "a szekrényt már kinyitottad.";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
                         case "ajtó":
-                            if (seged[2] == "nézd")
+                            switch (seged[2])
                             {
-                                return "Az ajtó nyitva van.";
+                                case "nézd": return "Az ajtó nyitva van.+5";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
                             }
-                            else
+                        case "ablak":
+                            switch (seged[2])
                             {
-                                return $"Az ajtóval nem használhatod ({seged[2]}) parancsot!";
+                                case "nézd": return "Az ablak nyitva van.";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
                             }
+                        case "fürdõkád":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "A fürdõkád üres.";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        
                         default: return "";
                     }
 
                 case "3":
+                    switch (seged[1])
+                    {
+                        case "szekrény":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "A szekrény résnyire nyitva van.";
+                                case "húzd": return "A szekrényt elhúztad, egy ablak van mögötte.+1+3";
+                                case "nyisd": return "A szekrényt sikeresen kinyitottad, egy dobozt látsz benne.+2+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }                        
+                        default: return "";
+                    }
+
+                case "4":
+                    switch (seged[1])
+                    {
+                        case "szekrény":
+                            switch (seged[2])
+                            {
+                                case "nézd": return "A szekrény nyitva van.+5";
+                                case "húzd": return "A szekrényt elhúztad, egy ablak van mögötte.+1+3";
+                                case "nyisd": return "A szekrényt már kinyitottad.+5";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "doboz":
+                            switch (seged[2])
+                            {
+                                case "tedd le": return "Ha leteszed többé nem tudod felvenni. Biztos eltávolítod a leltáradból?+6";
+                                case "nyisd": return "A dobozt kinyitottad, egy kulcsot látsz benne.+1+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "ajtó":                            
+                            switch (seged[2])
+                            {
+                                case "nyisd": return "Az ajtót kinyitottad, így a \'nyugat\' paranccsal átmehetsz a másik szobába.+2+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "ablak":
+                            switch (seged[2])
+                            {
+                                case "törd": return "Az ablakot betörted az észak paranccsal mehetsz tovább.+2+3";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "kulcs":
+                            switch (seged[2])
+                            {
+                                case "tedd le": return "Ha leteszed többé nem tudod felvenni. Biztos eltávolítod a leltáradból?+6";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+                        case "feszítõvas":
+                            switch (seged[2])
+                            {
+                                case "tedd le": return "Ha leteszed többé nem tudod felvenni. Biztos eltávolítod a leltáradból?+6";
+                                default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
+                            }
+
+                        default: return "";
+                    }
+
 
                 default: return "Nincs itt ilyen tárgy vagy még nem látható!";
             }
 
         }
+
+
 
         static string Help()
         {
@@ -101,7 +216,7 @@ namespace Jatek
             bool Keszvane = false;
             Parancs p;
 
-            List<string> Leltar = new List<string>();
+            HashSet<string> Leltar = new HashSet<string>();
             List<string> Allohely = new List<string>();
             List<Targy> targyak = new List<Targy>();
 
@@ -223,14 +338,65 @@ namespace Jatek
                             if (szoveg!="")
                             {
                                 string[] szovegseged = szoveg.Split('+');
-                                switch (szovegseged.Length)
+                                if (szovegseged.Length==1)
                                 {
-                                    case 2:
-
-
-                                    default:
-                                        break;
+                                    Console.WriteLine(szoveg + "\n");
                                 }
+                                else
+                                {
+                                    if (szovegseged[1]=="6")
+                                    {
+                                        string melyik;
+                                        do
+                                        {
+                                            Console.WriteLine(szovegseged[0] + " Igen/Nem\n");
+                                            melyik = Console.ReadLine();
+                                        } while (melyik!="Igen" || melyik!="Nem");
+                                        if (melyik=="Igen" && Leltar.Contains(p.Miaz))
+                                        {
+                                            Leltar.Remove(p.Miaz);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i < szovegseged.Length; i++)
+                                        {
+                                            switch (szovegseged[i])
+                                            {
+                                                case "0": targyak.Find(x => x.Nev == p.Miaz).Lathatosag(); break;
+                                                case "1": targyak.Find(x => x.Nev == p.Miaz).Hasznalat(); break;
+                                                case "2": targyak.Find(x => x.Nev == p.Miaz).Elvegzett(); break;
+                                                case "3":
+                                                    switch (p.Miaz)
+                                                    {
+                                                        case "fürdõkád": targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"]=true ; break;
+                                                        case "szekrény":
+                                                            if (p.Mitcsinal=="húzd")
+                                                            {
+                                                                targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"] = true; break;
+                                                            }
+                                                            if (p.Mitcsinal=="nyisd")
+                                                            {
+                                                                targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"] = true; break;
+                                                            }
+                                                            break;
+                                                        case "ajtó":
+                                                        case "ablak": break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                    break;
+                                                case "4": Leltar.Add(p.Miaz); break;
+                                                case "5":
+                                                    break;
+
+                                            }
+                                        }
+                                        Console.WriteLine(szovegseged[0] + "\n");
+                                    }
+                                    
+                                }
+                                
                             }
                             
                         }
