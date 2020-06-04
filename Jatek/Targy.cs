@@ -28,7 +28,42 @@ namespace Jatek
             return String.Join(";", Szoba, Tulajdonsagok.Values);
         }
 
-        
+        public void Lathatosag()
+        {
+            if (Tulajdonsagok["lathatoe"])
+            {
+                Tulajdonsagok["lathatoe"] = false;
+            }
+            else
+            {
+                Tulajdonsagok["lathatoe"] = true;
+            }
+        }
+
+        public void Hasznalat()
+        {
+            if (Tulajdonsagok["hasznalhatoe"])
+            {
+                Tulajdonsagok["hasznalhatoe"] = false;
+            }
+            else
+            {
+                Tulajdonsagok["hasznalhatoe"] = true;
+            }
+        }
+
+        public void Elvegzett()
+        {
+            if (Tulajdonsagok["elvegzette"])
+            {
+                Tulajdonsagok["elvegzette"] = false;
+            }
+            else
+            {
+                Tulajdonsagok["elvegzette"] = true;
+            }
+        }
+
         
     }
 }

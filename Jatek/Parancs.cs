@@ -80,7 +80,7 @@ namespace Jatek
                 case "fürdőkád":
                 case "": seged1 = true; break;
                 case "ajtó":
-                    if (Mithasznal == "kulcs")
+                    if (Mithasznal == "kulcs" || Mithasznal == "")
                     {
                         seged2 = true;
                     }
@@ -90,7 +90,7 @@ namespace Jatek
                     }
                     break;
                 case "ablak":
-                    if (Mithasznal == "feszítővas")
+                    if (Mithasznal == "feszítővas" || Mithasznal == "")
                     {
                         seged2 = true;
                     }
@@ -147,13 +147,34 @@ namespace Jatek
             }
             else
             {
-                return "0";
+                if (nev == "doboz" || nev == "feszítővas" || nev == "kulcs")
+                {
+                    return String.Join(" ", 4, nev, Mitcsinal);
+                }
+                else
+                {
+                    return "0";
+                }
             }
         }
 
-        public string Tobbparancs(Dictionary<string, bool> tulajdonsagok, Dictionary<string, bool> hasznalatitargy)
+        public string Tobbparancs(string mi, string mit, string lathatoemi, bool leltarbanvane, string hasznalmit, string elvegzettmit)
         {
-            
+            if (leltarbanvane && lathatoemi=="true" && hasznalmit == "true" && elvegzettmit == "true")
+            {
+                if (mi == "kulcs" || mi == "feszítővas")
+                {
+                    return String.Join(" ", 4, mit, Mitcsinal);
+                }
+                else
+                {
+                    return String.Join(" ", 4, mi, Mitcsinal);
+                }
+            }
+            else
+            {
+                return "0";
+            }
         }
     }
 }
