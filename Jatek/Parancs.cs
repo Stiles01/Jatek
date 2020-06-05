@@ -58,6 +58,14 @@ namespace Jatek
             }
         }
 
+        public void Csere()
+        {
+            string seged1 = Miaz;
+            string seged2 = Mithasznal;
+            Miaz = seged2;
+            Mithasznal = seged1;
+        }
+
         public bool Ellenorzes(string allohely, string szoba, bool leheteilyen)
         {
             if (leheteilyen && allohely == szoba)
@@ -72,50 +80,33 @@ namespace Jatek
 
         public bool Leheteilyen()
         {
-            bool seged1 = false, seged2 = false;
             switch (Miaz)
             {
                 case "szekrény":
                 case "doboz":
                 case "fürdőkád":
-                case "": seged1 = true; break;
+                case "": return true;
                 case "ajtó":
                     if (Mithasznal == "kulcs" || Mithasznal == "")
                     {
-                        seged2 = true;
+                        return true;
                     }
                     else
                     {
-                        seged2 = false;
+                        return false;
                     }
-                    break;
                 case "ablak":
                     if (Mithasznal == "feszítővas" || Mithasznal == "")
                     {
-                        seged2 = true;
+                        return true;
                     }
                     else
                     {
-                        seged2 = false;
+                        return false;
                     }
-                    break;
-                default: seged1 = false; break;
+                default: return false;
             }
-            if (seged1)
-            {
-                if (seged2)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            
         }
 
         public string Targyasparancs(string nev, string lathatoe, string hasznalhato, string elvegzette)
