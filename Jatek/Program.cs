@@ -114,7 +114,7 @@ namespace Jatek
                         case "ajtó":
                             switch (seged[2])
                             {
-                                case "nézd": return "Az ajtó nyitva van.+5";
+                                case "nézd": return "az ajtó nyitva van.+5";
                                 default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
                             }
                         case "ablak":
@@ -174,7 +174,7 @@ namespace Jatek
                         case "ablak":
                             switch (seged[2])
                             {
-                                case "törd": return "Az ablakot betörted az észak paranccsal mehetsz tovább.+2+3";
+                                case "törd": return "Az ablakot betörted az észak paranccsal juthasz ki.+2+3";
                                 default: return "Nem használhatod ezt a parancsot ezen a tárgyon.";
                             }
                         case "kulcs":
@@ -293,18 +293,112 @@ namespace Jatek
                         Console.WriteLine(Help());
                     }                                     
                 }
+                if ((p.Miaz =="feszítõvas" || p.Miaz == "kulcs") && p.Mithasznal!="")
+                {
+                    p.Csere();
+                }
 
                 if (p.Miaz=="")
                 {
                     switch (p.Mitcsinal)
                     {
                         case "nézd":
+                            if (Allohely.Last() == "nappali")
+                            {
+                                if (!targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"])
+                                {
+                                    Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.\n");
+                                }
+                            }
+                            else
+                            {
+                                if (Allohely.Last() == "fürdõ")
+                                {
+                                    if (!targyak.Find(x => x.Nev == "fürdõkád").Tulajdonsagok["elvegzette"])
+                                    {
+                                        Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat, benne egy feszítõvasat és egy ajtót keletre.\n");
+                                    }
+                                    else
+                                    {                                        
+                                        Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat és egy ajtót keletre.\n");
+                                    }
+                                }
+                            }
                             break;
                         case "kelet":
+                            if (Allohely.Last() == "fürdõ")
+                            {
+                                Allohely.Add("nappali");
+                                if (!targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"])
+                                {
+                                    Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.\n");
+                                }
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("Innen nem lehet keletre menni! (A nappaliban vagy)\n");
+                            }
                             break;
                         case "nyugat":
+                            if (Allohely.Last() == "nappali")
+                            {
+                                if (targyak.Find(x => x.Nev == "ajtó").Tulajdonsagok["elvegzette"])
+                                {
+                                    Allohely.Add("fürdõ");
+                                    if (!targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"])
+                                    {
+                                        Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat és egy ajtót keletre.\n");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat, benne egy feszítõvasat és egy ajtót nyugatra.\n");
+                                    }
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Nyugatra egy zárt ajtó található.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Innen nem lehet nyugatra menni! (A fürdõben vagy)\n");
+                            }
                             break;
                         case "észak":
+                            if (Allohely.Last() == "nappali")
+                            {
+                                Allohely.Add("nappali");
+                                if (targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"])
+                                {
+                                    if (!targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["elvegzette"])
+                                    {
+                                        Console.WriteLine("Északon egy zárt ablakot látsz.\n");
+                                    }
+                                    else
+                                    {
+                                        Keszvane = true;
+                                        Console.WriteLine("Gratulálok! Sikerült kijutnod a szobából. :)\n");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Innen nem lehet északra menni.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Innen nem lehet északra menni!\n");
+                            }
                             break;
                         case "?":   Console.WriteLine(Help());
                             break;
@@ -317,24 +411,25 @@ namespace Jatek
                             break;
                         case "leltár":  Console.WriteLine($"Leltár: {String.Join("; ", Leltar)}\n");
                             break;
-                        default:    Console.WriteLine($"Nem helyes oarancsot adtál meg: {parancs}\n");
+                        default:    Console.WriteLine($"Nem helyes parancsot adtál meg: {parancs}\n");
                             break;
                     }
                 }
                 else
                 {
                     bool leheteilyen = p.Leheteilyen();
-                    string szoba = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Szoba).ToString();
-                    string nev = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Nev).ToString();
-                    string lathatoe = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["lathatoe"]).ToString();
-                    string hasznalhato = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["hasznalhato"]).ToString();
-                    string elvegzette = targyak.Where(x => x.Nev == p.Miaz).Select(x => x.Tulajdonsagok["elvegzette"]).ToString();
+                    string szoba = targyak.Find(x => x.Nev == p.Miaz).Szoba.ToString();
+                    string nev = targyak.Find(x => x.Nev == p.Miaz).Nev.ToString();
+                    string lathatoe = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"].ToString();
+                    string hasznalhato = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["hasznalhatoe"].ToString();
+                    string elvegzette = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["elvegzette"].ToString();
 
                     if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen))
                     {
                         if (p.Mithasznal=="")
-                        {                            
-                            string szoveg = Szamok(p.Targyasparancs(nev, lathatoe,hasznalhato, elvegzette));
+                        {
+                            string kod = p.Targyasparancs(nev, lathatoe, hasznalhato, elvegzette);
+                            string szoveg = Szamok(kod);
                             if (szoveg!="")
                             {
                                 string[] szovegseged = szoveg.Split('+');
@@ -369,7 +464,9 @@ namespace Jatek
                                                 case "3":
                                                     switch (p.Miaz)
                                                     {
-                                                        case "fürdõkád": targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"]=true ; break;
+                                                        case "fürdõkád": targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"]=true;
+                                                            targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["elvegzette"] = true;
+                                                            break;
                                                         case "szekrény":
                                                             if (p.Mitcsinal=="húzd")
                                                             {
@@ -379,17 +476,47 @@ namespace Jatek
                                                             {
                                                                 targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"] = true; break;
                                                             }
+                                                            break;                                                        
+                                                        case "ablak":
+                                                            Console.WriteLine(szovegseged[0]+"\n");
+                                                            string vege = Console.ReadLine();
+                                                            if (vege == "észak")
+                                                            {
+                                                                Keszvane = true;
+                                                            }
                                                             break;
-                                                        case "ajtó":
-                                                        case "ablak": break;
-                                                        default:
-                                                            break;
+                                                        case "ajtó": targyak.Find(x => x.Nev == "fürdõkád").Tulajdonsagok["lathatoe"] = true; break;
+                                                        case "doboz": targyak.Find(x => x.Nev == "kulcs").Tulajdonsagok["lathatoe"] = true; break;
                                                     }
                                                     break;
                                                 case "4": Leltar.Add(p.Miaz); break;
                                                 case "5":
+                                                    switch (p.Miaz)
+                                                    {
+                                                        case "ajtó":
+                                                            if (Allohely.Last()=="nappali")
+                                                            {
+                                                                Console.WriteLine("Nyugatra " + szovegseged[0]);
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine("Keletre  " + szovegseged[0]);
+                                                            }
+                                                            break;
+                                                        case "szekrény":
+                                                            if (targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"])
+                                                            {
+                                                                Console.WriteLine(szovegseged[0]+" Egy dobozt látsz benne, vedd fel.");
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine(szovegseged[0]);
+                                                            }
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
                                                     break;
-
                                             }
                                         }
                                         Console.WriteLine(szovegseged[0] + "\n");
@@ -402,522 +529,16 @@ namespace Jatek
                         }
                         else
                         {
-
+                            string kod = p.Tobbparancs(nev, lathatoe, hasznalhato, elvegzette);
+                            string szoveg = Szamok(kod);
                         }
                     }
                     else
                     {
-                        Console.WriteLine($"Nem jó a parancs, amit megadtál! Nem lehet ebben a szobában ({szoba}) vagy ebben a helyzetben használni. Ellenõrizd, amit beírtál!\n");
+                        Console.WriteLine($"Nem jó a parancs, amit megadtál! Nem lehet ebben a szobában ({Allohely.Last()}) vagy ebben a helyzetben használni. Ellenõrizd, amit beírtál!\n");
                     }
                 }
-                //switch (p.Mitcsinal)
-                //        {
-                //            case "nézd":
-                //                    if (Allohely.Last()=="nappali")
-                //                    {                                    
-                //                        if (Ablak.LathatoE == false)
-                //                        {
-                //                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.\n");
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        if (Allohely.Last() == "fürdõ")
-                //                        {
-                //                            if (!Furdokad.Elvegzette)
-                //                            {
-                //                                if (!Leltar.Exists(x => x == "feszítõvas"))
-                //                                {
-                //                                    Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat, benne egy feszítõvasat és egy ajtót keletre.\n");
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat és egy ajtót keletre.\n");
-                //                                }
-                //                            }
-                //                            else
-                //                            {
-                //                                if (!Leltar.Exists(x => x == "feszítõvas"))
-                //                                {
-                //                                    Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat, benne egy feszítõvasat és egy ajtót keletre.\n");
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat és egy ajtót keletre.\n");
-                //                                }
-                //                            }
-                //                        }    
-                //                    }
-                //                break;
-
-                //            case "kelet":
-                //                    if (Allohely.Last()=="fürdõ")
-                //                    {
-                //                        Allohely.Add("nappali");
-                //                        if (Ablak.LathatoE == false)
-                //                        {
-                //                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt és egy ajtót nyugatra.\n");
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine("A nappaliban vagy. Látsz egy szekrényt, egy ablakot északra és egy ajtót nyugatra.\n");
-                //                        }
-                                    
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine("Innen nem lehet keletre menni! (A nappaliban vagy)\n");
-                //                    }
-                //                break;
-
-                //            case "nyugat":
-                //                    if (Allohely.Last() == "nappali")
-                //                    {
-                //                        if (Ajto.Elvegzette == true)
-                //                        {   
-                //                            Allohely.Add("fürdõ");
-                //                            if (Feszitovas.LathatoE == false)
-                //                            {
-                //                                Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat és egy ajtót keletre.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("A fürdõben vagy. Látsz egy fürdõkádat, benne egy feszítõvasat és egy ajtót nyugatra.\n");
-                //                            }
-                                        
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine("Nyugatra egy zárt ajtó található.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine("Innen nem lehet nyugatra menni! (A fürdõben vagy)\n");
-                //                    }
-                //                break;
-                                
-                //            case "észak":
-                //                    if (Allohely.Last() == "nappali")
-                //                    {
-                //                        Allohely.Add("nappali");
-                //                        if (Ablak.LathatoE)
-                //                        {
-                //                            if (Ablak.Elvegzette == false)
-                //                            {
-                //                                Console.WriteLine("Északon egy zárt ablakot látsz.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Keszvane = true;
-                //                                Console.WriteLine("Gratulálok! Sikerült kijutnod a szobából. :)\n");
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine("Innen nem lehet északra menni.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine("Innen nem lehet északra menni!\n");
-                //                    }
-                //                break; 
-                                
-                //            case "?":
-                //                    Console.WriteLine(Help());
-                //                break;
-
-                //            case "leltár":
-                //                    Console.WriteLine($"Leltár: {String.Join("; ", Leltar)}\n");
-                //                break;
-
-                //            case "mentés":
-                //                    File.Delete("mentes.sav");
-                //                    StreamWriter w = new StreamWriter("mentes.sav");                               
-                //                    w.Write(Mentes(Leltar, Szekreny, Doboz, Kulcs, Ajto, Ablak, Furdokad, Feszitovas, Allohely.Last()));
-                //                    w.Close();
-                //                    Console.WriteLine("Sikeresen elmentetted!\n");
-                //                break;
-
-                //            default:
-                //                    Console.WriteLine($"{Nemhelyes(parancs)}\n");
-                //                break;
-                //        }
-                //// nezd, kelet, nyugat, eszak, ?, leltar, mentes   //KESZ
-                
-                //switch (p.Mitcsinal)
-                //        {
-                //            case "nézd":                                                                       
-                //                    switch (p.Miaz)
-                //                    {
-                //                        case "feszítõvas":
-                //                            if (!Ablak.Elvegzette)
-                //                            {
-                //                                Console.WriteLine("Használd fel a feszítõvasat valamire.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("A feszítõvast már nem tudod mire használni.\n");
-                //                            }
-                //                        break;
-
-                //                        case "doboz":
-                //                            if (Doboz.Elvegzette)
-                //                            {
-                //                                Console.WriteLine("Nem tudsz már mit csinálni a dobozzal.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("A doboz zárva van.\n");
-                //                            }
-                //                        break;
-
-                //                        case "kulcs":
-                //                            if (Ajto.Elvegzette)
-                //                            {
-                //                                Console.WriteLine("Nem tudsz már mit csinálni a kulccsal.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("Használd fel a kulcsot valamire.\n");
-                //                            }
-                //                        break;
-
-                //                        default:
-                //                                if (Allohely.Last() == "nappali")
-                //                                {
-                //                                    switch (p.Miaz)
-                //                                    {
-                //                                        case "ablak":
-                //                                                if (Ablak.LathatoE)
-                //                                                {
-                //                                                    if (!Ablak.Elvegzette)
-                //                                                    {
-                //                                                        Console.WriteLine("Az ablak zárva van.\n");
-                //                                                    }
-                //                                                    else
-                //                                                    {
-                //                                                        Console.WriteLine("Az ablak nyitva van.\n");
-                //                                                    }
-                //                                                }
-                //                                                else
-                //                                                {
-                //                                                    Console.WriteLine("Nem látsz ablakot.\n");
-                //                                                }
-                //                                            break;
-
-                //                                        case "ajtó":
-                //                                                if (!Ajto.Elvegzette)
-                //                                                {
-                //                                                    Console.WriteLine("Az ajtó zárva van.\n");
-                //                                                }
-                //                                                else
-                //                                                {
-                //                                                    Console.WriteLine("Az ajtó nyitva van.\n");
-                //                                                }
-                //                                            break;
-
-                //                                        case "szekrény":
-                //                                                if (!Szekreny.Elvegzette)
-                //                                                {
-                //                                                    Console.WriteLine("A szekrény ajtaja résnyire nyitva van. Próbálj meg egy másik parancsot.\n");
-                //                                                }
-                //                                                else
-                //                                                {
-                //                                                    if (Doboz.LathatoE)
-                //                                                    {
-                //                                                        Console.WriteLine("A szekrény nyitva van és látsz benne egy dobozt.\n");
-                //                                                    }
-                //                                                    else
-                //                                                    {
-                //                                                        Console.WriteLine("A szekrény nyitva van és a dobozt már felvetted.\n");
-                //                                                    }
-                //                                                }
-                //                                            break;
-
-                //                                        default:
-                //                                            break;
-                //                                    }
-                //                                }
-                //                                else
-                //                                {
-                //                                    if (p.Miaz == "fürdõkád")
-                //                                    {
-                //                                        if (!Feszitovas.LathatoE)
-                //                                        {
-                //                                            Console.WriteLine("A fürdõkádban egy feszítõvasat látsz.\n");
-                //                                            Feszitovas.LathatoE = true;
-                //                                            Furdokad.Elvegzette = true;
-                //                                        }
-                //                                        else
-                //                                        {
-                //                                            if (Feszitovas.Elvegzette)
-                //                                            {
-                //                                                Console.WriteLine("A fürdõkád üres.\n");
-                //                                            }
-                //                                            else
-                //                                            {
-                //                                                Console.WriteLine("A fürdõkádban egy feszítõvas található.\n");
-                //                                            }
-                //                                        }
-                //                                    }
-                //                                    else
-                //                                    {
-                //                                        if (p.Miaz == "ajtó")
-                //                                        {
-                //                                            Console.WriteLine("Keletre egy nyitott ajtót látsz.\n");
-                //                                        }
-                //                                    }
-                //                                }
-                //                            break;
-                //                    }                                   
-                //                break;
-
-                //            case "húzd":
-                //                    if (Allohely.Last()=="nappali")
-                //                    {
-                //                        if (p.Miaz=="szekrény")
-                //                        {
-                //                            if (!Ablak.LathatoE)
-                //                            {
-                //                                Console.WriteLine("Elhúztad a szekrényt, most látsz valamit mögötte. Írd be a 'nézd' parancsot, hogy megtudd mi az.\n");
-                //                                Ablak.LathatoE = true;
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("Elhúztad már a szekrényt!\n");
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine($"Nem tudod elhúzni a/az {p.Miaz}-t, próbálj meg valami mást.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine($"Nem tudod elhúzni a/az {p.Miaz}-t, próbálj meg valami mást.\n");
-                //                    }
-                //                break;
-
-                //            case "nyisd":                                    
-                //                    if (p.Miaz == "doboz")
-                //                    {
-                //                        if (Leltar.Exists(x => x == "doboz"))
-                //                        {
-                //                            Kulcs.LathatoE = true;
-                //                            Console.WriteLine("A dobozt kinyitottad, egy kulcsot látsz.\n");
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine("Még nem vetted fel a dobozt.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        if (Allohely.Last() == "nappali")
-                //                        {
-                //                            if (p.Miaz == "szekrény")
-                //                            {
-                //                                if (!Szekreny.Elvegzette)
-                //                                {
-                //                                    Szekreny.Elvegzette = true;
-                //                                    Doboz.LathatoE = true;
-                //                                    Console.WriteLine("Kinyitottad a szekrényt, látsz benne egy dobozt.\n");
-                //                                }
-                //                                else
-                //                                {
-                //                                    if (!Doboz.Elvegzette)
-                //                                    {
-                //                                        Console.WriteLine("A szekrényt már kinyitottad, látsz benne egy dobozt.\n");
-                //                                    }
-                //                                    else
-                //                                    {
-                //                                        Console.WriteLine("A szekrényt már kinyitottad és a dobozt már felvetted.\n");
-                //                                    }
-
-                //                                }
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine($"A {p.Miaz} tárgy nem nyitható. Próbálj meg mást.\n");
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine($"A {p.Miaz} tárgy nem nyitható. Próbálj meg mást.\n");
-                //                        }
-                //                    }                                                                      
-                //                break;
-
-                //            case "vedd fel":
-                //                    switch (p.Miaz)
-                //                    {
-                //                        case "kulcs":
-                //                                if (Kulcs.LathatoE)
-                //                                {
-                //                                    Kulcs.Elvegzette = true;
-                //                                    Console.WriteLine("Felvetted a kulcsot.\n");
-                //                                    Leltar.Add(p.Miaz);  
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine("Nem látsz kulcsot.\n");
-                //                                }
-                //                            break;
-                //                        case "doboz":
-                //                                if (Allohely.Last() == "nappali")
-                //                                {
-                //                                    if (Doboz.LathatoE)
-                //                                    {
-                //                                        Doboz.Elvegzette = true;
-                //                                        Leltar.Add(p.Miaz);
-                //                                        Console.WriteLine("Felvetted a dobozt.\n");
-                //                                    }
-                //                                    else
-                //                                    {
-                //                                        Console.WriteLine("Nem látsz dobozt.\n");
-                //                                    }
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine("Nem látsz dobozt.\n");
-                //                                }
-                //                            break;
-                //                        case "feszítõvas":
-                //                                if (Allohely.Last() == "fürdõ")
-                //                                {
-                //                                    if (Feszitovas.LathatoE)
-                //                                    {
-                //                                        Feszitovas.Elvegzette = true;
-                //                                        Leltar.Add(p.Miaz);
-                //                                        Console.WriteLine("Felvetted a feszítõvasat.\n");
-                //                                    }
-                //                                    else
-                //                                    {
-                //                                        Console.WriteLine("Nem látsz feszítõvasat.\n");
-                //                                    }
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine("Nem látsz feszítõvasat.\n");
-                //                                }
-                //                            break;
-                //                        default:
-                //                                Console.WriteLine($"Nem lehet felvenni a/az {p.Miaz}-t.\n");
-                //                            break;
-                //                    }
-                //                break;
-
-                //            case "tedd le":
-                //                    if (Leltar.Exists(x=>x == p.Miaz))
-                //                    {
-                //                        Console.Write("Ha leteszel egy tárgyat utána már nem tudod újra felvenni, biztos leteszed?\nigen/nem\n");
-                //                        string sege = Console.ReadLine();
-                //                        if (sege == "igen")
-                //                        {
-                //                            Console.WriteLine($"Letetted a/az {p.Miaz}-t.\n");
-                //                            Leltar.Remove(p.Miaz);
-                //                        }
-                //                        else
-                //                        {
-                //                            if (sege == "nem")
-                //                            {
-                //                                Console.WriteLine($"Nem tetted le a/az {p.Miaz}-t.\n");
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine($"Hibásan írtad be, nem tettél le semmit.\n");
-                //                            }
-                //                        }                                       
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine($"Nem található a leltáradban {p.Miaz}.\n");
-                //                    }
-                //                break;
-
-                //            default:
-                //                Console.WriteLine($"{Nemhelyes(parancs)}\n");
-                //                break;
-                //        }
-                //// nezd, huzd, nyisd, vedd fel, tedd le
-                                       
-                //switch (p.Mitcsinal)
-                //        {
-                //            case "nyisd":
-                //                    if (Allohely.Last() == "nappali")
-                //                    {
-                //                        if (p.Miaz == "ajtó")
-                //                        {
-                //                            if (!Ajto.Elvegzette)
-                //                            {
-                //                                if (Kulcs.Elvegzette)
-                //                                {
-                //                                    Ajto.Elvegzette = true;
-                //                                    Console.WriteLine("Az ajtót kinyitottad.\n");
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel kinyitni az ajtót. Keress mást hozzá!\n");
-                //                                }
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine("Az ajtó már nyitva van.\n");
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine($"Nem tudod {p.Miaz}-t kinyitni {p.Mithasznal}-val/vel.\n");
-                //                        }                                    
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine($"Nem tudod {p.Miaz}-t kinyitni {p.Mithasznal}-val/vel.\n");
-                //                    }
-                //                break;
-                //            case "törd":
-                //                    if (Allohely.Last() == "nappali")
-                //                    {
-                //                        if (p.Miaz == "ablak")
-                //                        {
-                //                            if (Ablak.LathatoE)
-                //                            {
-                //                                if (Feszitovas.Elvegzette)
-                //                                {
-                //                                    Console.WriteLine("Az ablakot betörted.\n");
-                //                                    Ablak.Elvegzette = true;
-                //                                }
-                //                                else
-                //                                {
-                //                                    Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betörni az ablakot.\n");
-                //                                }
-                //                            }
-                //                            else
-                //                            {
-                //                                Console.WriteLine($"Nem látsz ablakot, amit betörhetnél.\n");
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betörni a/az {p.Miaz}-t.\n");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        Console.WriteLine($"Nem tudod {p.Mithasznal}-val/vel betörni a/az {p.Miaz}-t.\n");
-                //                    }
-                //                break;
-                //            default:
-                //                Console.WriteLine($"{Nemhelyes(parancs)}\n");
-                //                break;
-                //        }
-                //// nyisd, tord                
+                          
             }
 
             Console.ReadKey();
