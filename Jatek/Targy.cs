@@ -25,7 +25,7 @@ namespace Jatek
 
         public string Menteshez()
         {
-            return String.Join(";", Szoba, Tulajdonsagok.Values);
+            return String.Join(";", Szoba, Tulajdonsagok["lathatoe"], Tulajdonsagok["hasznalhatoe"], Tulajdonsagok["elvegzette"]);
         }
 
         public void Lathatosag()

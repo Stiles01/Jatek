@@ -39,7 +39,7 @@ namespace Jatek
             {
                 mentestargyak.Add(item.Menteshez());
             }
-            return String.Join("\n", leltarok, mentestargyak, allohely);
+            return String.Join("\n", leltarok, String.Join("\n", mentestargyak), allohely);
         }
 
 
@@ -246,22 +246,53 @@ namespace Jatek
                 {
                     if (a == "true")
                     {
-                        StreamReader r = new StreamReader("mentes.sav", Encoding.UTF8);
-                        string c = r.ReadLine();
-                        if (c != "")
+                        try
                         {
-                            string[] seged = c.Split(';');
-                            foreach (var item in seged)
+                            StreamReader r = new StreamReader("mentes.sav", Encoding.UTF8);
+                            string c = r.ReadLine();
+                            if (c != "")
                             {
-                                Leltar.Add(item);
+                                string[] seged = c.Split(';');
+                                foreach (var item in seged)
+                                {
+                                    Leltar.Add(item);
+                                }
                             }
+                            while (!r.EndOfStream)
+                            {
+                                targyak.Add(new Targy(r.ReadLine()));
+                            }
+                            Allohely.Add(r.ReadLine());
+                            break;
                         }
-                        while (!r.EndOfStream)
+                        catch (NullReferenceException)
                         {
-                            targyak.Add(new Targy(r.ReadLine()));
+                            targyak.Add(new Targy("szekrény;nappali;true;true;false"));
+                            targyak.Add(new Targy("doboz;nappali;false;false;false"));
+                            targyak.Add(new Targy("kulcs;nappali;false;false;false"));
+                            targyak.Add(new Targy("ajtó;nappali;true;false;false"));
+                            targyak.Add(new Targy("ablak;nappali;false;false;false"));
+                            targyak.Add(new Targy("fürdõkád;fürdõ;false;false;false"));
+                            targyak.Add(new Targy("feszítõvas;fürdõ;false;false;false"));
+                            Allohely.Add("nappali");
+                            Leltar.Clear();
+                            break;
+                            throw;
                         }
-                        Allohely.Add(r.ReadLine());
-                        break;
+                        catch (FileNotFoundException)
+                        {
+                            targyak.Add(new Targy("szekrény;nappali;true;true;false"));
+                            targyak.Add(new Targy("doboz;nappali;false;false;false"));
+                            targyak.Add(new Targy("kulcs;nappali;false;false;false"));
+                            targyak.Add(new Targy("ajtó;nappali;true;false;false"));
+                            targyak.Add(new Targy("ablak;nappali;false;false;false"));
+                            targyak.Add(new Targy("fürdõkád;fürdõ;false;false;false"));
+                            targyak.Add(new Targy("feszítõvas;fürdõ;false;false;false"));
+                            Allohely.Add("nappali");
+                            Leltar.Clear();
+                            break;
+                            throw;
+                        }
                     }
                     else
                     {
@@ -271,7 +302,7 @@ namespace Jatek
                     }
                 }
             }
-            Console.WriteLine("Ha bármikor elakadnál nyomd meg a \"?\" billentyût!");
+            Console.WriteLine("Ha bármikor elakadnál nyomd meg a \"?\" billentyût!\nJó átékot!\n");
 
 
             while (!Keszvane)
@@ -418,11 +449,23 @@ namespace Jatek
                 else
                 {
                     bool leheteilyen = p.Leheteilyen();
-                    string szoba = targyak.Find(x => x.Nev == p.Miaz).Szoba.ToString();
-                    string nev = targyak.Find(x => x.Nev == p.Miaz).Nev.ToString();
-                    bool lathatoe = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"];
-                    bool hasznalhato = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["hasznalhatoe"];
-                    bool elvegzette = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["elvegzette"];
+                    string szoba, nev;
+                    bool lathatoe, hasznalhato, elvegzette;
+                    try
+                    {
+                        szoba = targyak.Find(x => x.Nev == p.Miaz).Szoba.ToString();
+                        nev = targyak.Find(x => x.Nev == p.Miaz).Nev.ToString();
+                        lathatoe = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"];
+                        hasznalhato = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["hasznalhatoe"];
+                        elvegzette = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["elvegzette"];
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Hibás parancsot adtál meg!\n");
+                        break;
+                        throw;
+                    }
+                    
 
                     if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen) || p.Mitcsinal == "tedd le")
                     {
