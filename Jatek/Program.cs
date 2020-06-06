@@ -45,7 +45,7 @@ namespace Jatek
 
         static string Szamok(string kod)
         {
-            string[] seged = kod.Split(' ');
+            string[] seged = kod.Split(';');
 
             switch (seged[0])
             {
@@ -420,34 +420,130 @@ namespace Jatek
                     bool leheteilyen = p.Leheteilyen();
                     string szoba = targyak.Find(x => x.Nev == p.Miaz).Szoba.ToString();
                     string nev = targyak.Find(x => x.Nev == p.Miaz).Nev.ToString();
-                    string lathatoe = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"].ToString();
-                    string hasznalhato = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["hasznalhatoe"].ToString();
-                    string elvegzette = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["elvegzette"].ToString();
+                    bool lathatoe = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"];
+                    bool hasznalhato = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["hasznalhatoe"];
+                    bool elvegzette = targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["elvegzette"];
 
-                    if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen))
+                    if (p.Ellenorzes(Allohely.Last(), szoba, leheteilyen) || p.Mitcsinal == "tedd le")
                     {
-                        if (p.Mithasznal=="")
+                        if (p.Mithasznal == "")
                         {
                             string kod = p.Targyasparancs(nev, lathatoe, hasznalhato, elvegzette);
                             string szoveg = Szamok(kod);
-                            if (szoveg!="")
+                            if (szoveg != "")
                             {
                                 string[] szovegseged = szoveg.Split('+');
-                                if (szovegseged.Length==1)
+                                if (szovegseged.Length == 1)
                                 {
                                     Console.WriteLine(szoveg + "\n");
                                 }
                                 else
                                 {
-                                    if (szovegseged[1]=="6")
+                                    if (szovegseged[1] == "6")
+                                    {
+                                        Console.WriteLine(szovegseged[0] + " Igen/Nem\n");
+                                        string melyik = Console.ReadLine();                                  
+                                        if (melyik == "Igen" && Leltar.Contains(p.Miaz))
+                                        {
+                                            Leltar.Remove(p.Miaz);
+                                            Console.WriteLine($"Letetted a/az {p.Miaz} tárgyat.\n");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i < szovegseged.Length; i++)
+                                        {
+                                            switch (szovegseged[i])
+                                            {
+                                                case "0": targyak.Find(x => x.Nev == p.Miaz).Lathatosag(); break;
+                                                case "1": targyak.Find(x => x.Nev == p.Miaz).Hasznalat(); break;
+                                                case "2": targyak.Find(x => x.Nev == p.Miaz).Elvegzett(); break;
+                                                case "3":
+                                                    switch (p.Miaz)
+                                                    {
+                                                        case "fürdõkád":
+                                                            targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"] = true;
+                                                            targyak.Find(x => x.Nev == "fürdõkád").Tulajdonsagok["elvegzette"] = true;
+                                                            break;
+                                                        case "szekrény":
+                                                            if (p.Mitcsinal == "húzd")
+                                                            {
+                                                                targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"] = true; break;
+                                                            }
+                                                            if (p.Mitcsinal == "nyisd")
+                                                            {
+                                                                targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"] = true; break;
+                                                            }
+                                                            break;
+                                                        case "ablak":
+                                                            Console.WriteLine(szovegseged[0] + "\n");
+                                                            string vege = Console.ReadLine();
+                                                            if (vege == "észak")
+                                                            {
+                                                                Keszvane = true;
+                                                            }
+                                                            break;
+                                                        case "ajtó": targyak.Find(x => x.Nev == "fürdõkád").Tulajdonsagok["lathatoe"] = true; break;
+                                                        case "doboz": targyak.Find(x => x.Nev == "kulcs").Tulajdonsagok["lathatoe"] = true; break;
+                                                    }
+                                                    break;
+                                                case "4": Leltar.Add(p.Miaz); break;
+                                                case "5":
+                                                    switch (p.Miaz)
+                                                    {
+                                                        case "ajtó":
+                                                            if (Allohely.Last() == "nappali")
+                                                            {
+                                                                Console.Write("Nyugatra ");
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.Write("Keletre  ");
+                                                            }
+                                                            break;
+                                                        case "szekrény":
+                                                            if (targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"])
+                                                            {
+                                                                Console.WriteLine(" Egy dobozt látsz benne, vedd fel.");
+                                                            }                                                           
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                        Console.WriteLine(szovegseged[0] + "\n");
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            string kod = p.Tobbparancs(p.Miaz, p.Mithasznal, targyak.Find(x => x.Nev == p.Miaz).Tulajdonsagok["lathatoe"], Leltar.Contains(p.Mithasznal), targyak.Find(x => x.Nev == p.Mithasznal).Tulajdonsagok["hasznalhatoe"], targyak.Find(x => x.Nev == p.Mithasznal).Tulajdonsagok["elvegzette"]);
+                            string szoveg = Szamok(kod);
+                            
+                            if (szoveg!="")
+                            {
+                                string[] szovegseged = szoveg.Split('+');
+                                if (szovegseged.Length == 1)
+                                {
+                                    Console.WriteLine(szoveg + "\n");
+                                }
+                                else
+                                {
+                                    if (szovegseged[1] == "6")
                                     {
                                         string melyik;
                                         do
                                         {
                                             Console.WriteLine(szovegseged[0] + " Igen/Nem\n");
                                             melyik = Console.ReadLine();
-                                        } while (melyik!="Igen" || melyik!="Nem");
-                                        if (melyik=="Igen" && Leltar.Contains(p.Miaz))
+                                        } while (melyik != "Igen" || melyik != "Nem");
+                                        if (melyik == "Igen" && Leltar.Contains(p.Miaz))
                                         {
                                             Leltar.Remove(p.Miaz);
                                         }
@@ -464,25 +560,23 @@ namespace Jatek
                                                 case "3":
                                                     switch (p.Miaz)
                                                     {
-                                                        case "fürdõkád": targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["lathatoe"]=true;
-                                                            targyak.Find(x => x.Nev == "feszítõvas").Tulajdonsagok["elvegzette"] = true;
-                                                            break;
                                                         case "szekrény":
-                                                            if (p.Mitcsinal=="húzd")
+                                                            if (p.Mitcsinal == "húzd")
                                                             {
                                                                 targyak.Find(x => x.Nev == "ablak").Tulajdonsagok["lathatoe"] = true; break;
                                                             }
-                                                            if (p.Mitcsinal=="nyisd")
+                                                            if (p.Mitcsinal == "nyisd")
                                                             {
                                                                 targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"] = true; break;
                                                             }
-                                                            break;                                                        
+                                                            break;
                                                         case "ablak":
-                                                            Console.WriteLine(szovegseged[0]+"\n");
+                                                            Console.WriteLine(szovegseged[0] + "\n");
                                                             string vege = Console.ReadLine();
                                                             if (vege == "észak")
                                                             {
                                                                 Keszvane = true;
+                                                                Console.WriteLine("Gratulálok! Sikerült kijutnod a szobából. :)\n");
                                                             }
                                                             break;
                                                         case "ajtó": targyak.Find(x => x.Nev == "fürdõkád").Tulajdonsagok["lathatoe"] = true; break;
@@ -494,7 +588,7 @@ namespace Jatek
                                                     switch (p.Miaz)
                                                     {
                                                         case "ajtó":
-                                                            if (Allohely.Last()=="nappali")
+                                                            if (Allohely.Last() == "nappali")
                                                             {
                                                                 Console.WriteLine("Nyugatra " + szovegseged[0]);
                                                             }
@@ -506,7 +600,7 @@ namespace Jatek
                                                         case "szekrény":
                                                             if (targyak.Find(x => x.Nev == "doboz").Tulajdonsagok["lathatoe"])
                                                             {
-                                                                Console.WriteLine(szovegseged[0]+" Egy dobozt látsz benne, vedd fel.");
+                                                                Console.WriteLine(szovegseged[0] + " Egy dobozt látsz benne, vedd fel.");
                                                             }
                                                             else
                                                             {
@@ -521,20 +615,12 @@ namespace Jatek
                                         }
                                         Console.WriteLine(szovegseged[0] + "\n");
                                     }
-                                    
                                 }
-                                
                             }
-                            
-                        }
-                        else
-                        {
-                            string kod = p.Tobbparancs(nev, lathatoe, hasznalhato, elvegzette);
-                            string szoveg = Szamok(kod);
                         }
                     }
                     else
-                    {
+                    {                        
                         Console.WriteLine($"Nem jó a parancs, amit megadtál! Nem lehet ebben a szobában ({Allohely.Last()}) vagy ebben a helyzetben használni. Ellenõrizd, amit beírtál!\n");
                     }
                 }
